@@ -20,7 +20,7 @@ export default function Messages() {
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-              <ThemedText style={styles.toGallery}>See All</ThemedText>
+              {/* <ThemedText style={styles.toGallery}>See All</ThemedText> */}
             </ScrollView>
             </View>
             <View style={styles.section2}>
