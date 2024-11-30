@@ -1,39 +1,62 @@
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, ScrollView } from 'react-native'
+import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, ScrollView, FlatList } from 'react-native'
 const { width, height } = Dimensions.get('window');
 import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import Affirmation from '../../components/Affirmations';
+import { useState } from 'react';
 
 export default function Messages() {
+  const [affirmations, setAffirmations] = useState([
+    { id: '1', text: 'You got this' },
+    { id: '2', text: 'You are amazing' },
+    { id: '3', text: 'You look confident' },
+]);
+
+const renderAffirmation = ({ item }) => (
+  <LinearGradient 
+  colors={[Colors.light.yellow, Colors.light.blue]} // Gradient colors
+  locations={[0.2785, 0.9698]} // Approximate percentage positions (27.85% and 96.98%)
+  style={styles.affirmation}
+  start={{ x: 1, y: 0 }} // Gradient starts from the right
+  end={{ x: 0, y: 1 }}   // Gradient ends towards the bottom left
+>
+        <ThemedText style={styles.affirmationText}>{item.text}</ThemedText>
+    </LinearGradient>
+);
     return (
       <View style={styles.mainContainer}>
             <View style={styles.spacer}/>
             <View style={styles.section1}>
             <ThemedText style={styles.subtitle1}>
-              For You
+              From Us
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
-              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+            <FlatList
+                    data={affirmations} // Data array for affirmations
+                    renderItem={renderAffirmation} // Render each affirmation
+                    keyExtractor={(item) => item.id} // Unique key for each affirmation
+                    horizontal={true} // Enables horizontal scrolling
+                    showsHorizontalScrollIndicator={false} // Hides scroll bar
+                    contentContainerStyle={styles.affirmationsList}
+                />
               {/* <ThemedText style={styles.toGallery}>See All</ThemedText> */}
             </ScrollView>
             </View>
             <View style={styles.section2}>
             <ThemedText style={styles.subtitle1}>
-              For You
+              From Friends
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
-            
-            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
-            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+            <FlatList
+                    data={affirmations} // Data array for affirmations
+                    renderItem={renderAffirmation} // Render each affirmation
+                    keyExtractor={(item) => item.id} // Unique key for each affirmation
+                    horizontal={true} // Enables horizontal scrolling
+                    showsHorizontalScrollIndicator={false} // Hides scroll bar
+                    contentContainerStyle={styles.affirmationsList}
+                />
             </ScrollView>
             </View>
           
@@ -62,7 +85,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       marginBottom: 5,
     },
-    affirmation1: {
+    affirmation: {
       width: '70vw',
       aspectRatio: 2,
       flexDirection: 'row',
@@ -71,24 +94,10 @@ const styles = StyleSheet.create({
       // alignItems: 'center', // Align text horizontally
       marginBottom: 5,
       borderRadius: 10, // Optional: rounded corners
-      marginLeft: 15,
+      marginRight: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
       // marginTop: 150
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.8,
-      shadowRadius: 2,  
-      elevation: 5
-    },
-    affirmation: {
-      width: '80%',
-      height: '25%',
-      flexDirection: 'row',
-      backgroundColor: '#000000', // Background color
-      // justifyContent: 'center', // Align text vertically
-      // alignItems: 'center', // Align text horizontally
-      marginBottom: 15,
-      borderRadius: 10, // Optional: rounded corners
-      marginLeft: 15
     },
     subtitle1: {
       flexDirection: 'column',
@@ -110,5 +119,15 @@ const styles = StyleSheet.create({
       marginLeft: 15,
       alignItems: 'center',
       flex: 1
-    }
+    },
+    affirmationText: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 14,
+      lineHeight: 15,
+      textAlign: 'center'
+  },
+  affirmationsList: {
+    marginLeft: 15
+  }
 });

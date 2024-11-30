@@ -16,6 +16,7 @@ export default function MainDisplay() {
 
     const currentTime = useCurrentTime();
 
+    
 
     return (
         
@@ -29,7 +30,13 @@ export default function MainDisplay() {
                     resizeMode="contain"
                     />
                 </View>
-                
+                <LinearGradient 
+                    colors={['#AFE3FF', '#FFF186', '#FFF']} // Gradient colors
+                    locations={[0, 0.2221, 0.5483]} // Percentage positions converted to decimal (e.g., 22.21% = 0.2221)
+                    start={{ x: 0, y: 0 }} // Start at the top
+                    end={{ x: 0, y: 1 }}   // End at the bottom
+                    style={styles.backgroundCircle} // Style for the gradient container
+                />
                 <LinearGradient 
                     colors={['#FF87AD', '#C7CBFF', '#FFF']} // Gradient colors
                     locations={[0, 0.4203, 0.8757]} // Gradient positions
@@ -102,13 +109,37 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop: 0,
-        marginLeft: '10%',
+        marginTop: -15,
         position: 'relative', 
         zIndex: 10,
+        marginBottom: 65
     },
 
     upliftLogo: {
         width: 80,
-    }
+    },
+
+    // backgroundCircle: {
+    //     position: 'absolute',
+    //     width: '140%', // Make the circle larger than the screen
+    //     aspectRatio: 1, // Ensures it stays a perfect circle
+    //     borderRadius: 500, // Rounds the edges fully to make it circular
+    //     marginTop: 95,
+    //     // top: '-5%', // Adjust vertical position (negative pushes it up)
+    //     // left: '-25%', // Center it horizontally
+    //     zIndex: -1, // Push it behind other elements
+    // },
+
+    backgroundCircle: {
+        position: 'absolute',
+        width: '140%', // Make the circle larger than the screen
+        aspectRatio: 1, // Ensures it stays a perfect circle
+        borderRadius: 500, // Rounds the edges fully to make it circular
+        // marginTop: 95,
+        top: '-15%', // Adjust vertical position (negative pushes it up)
+        left: '-25%', // Center it horizontally
+        zIndex: -1, // Push it behind other elements
+    },
+
+
 });
