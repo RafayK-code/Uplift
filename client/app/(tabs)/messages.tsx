@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
-      color: '#FFFFFF',
+      color: Colors.light.background,
     },
 
     spacer: {
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
       width: '70vw',
       aspectRatio: 2,
       flexDirection: 'row',
-      backgroundColor: '#000000', // Background color
+      backgroundColor: Colors.light.text, // Background color
       // justifyContent: 'center', // Align text vertically
       // alignItems: 'center', // Align text horizontally
       marginBottom: 5,

@@ -7,6 +7,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from './messages';
+import Textbar from './textbar';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -45,16 +46,18 @@ export default function MainDisplay() {
                     <Messages/>
                 </View>
             </ScrollView>
+
+            <Textbar />
         </ThemedView>
     );
 }
 
 const styles = StyleSheet.create({
     mainContainer: {
+        width: '100%',
         flexGrow: 1, // Allow ScrollView to expand based on content
         flexDirection: 'column',
         alignItems: 'center',
-        padding: 20, // Add padding for better layout
     },
 
     logoContainer: {
@@ -72,7 +75,7 @@ const styles = StyleSheet.create({
     },
 
     messageContainer: {
-        width: '80%', 
+        width: '60%', 
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -92,10 +95,10 @@ const styles = StyleSheet.create({
     otherDisplay: {
         flex: 2,
         width: '100%',
-        backgroundColor: 'rgba(255, 255, 255, 0.8)',
         justifyContent: 'center', 
         alignItems: 'center',
         marginTop: 0,
+        marginLeft: '10%',
         position: 'relative', 
         zIndex: 10,
     },
