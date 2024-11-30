@@ -1,10 +1,11 @@
-import { Text, View, SafeAreaView, StyleSheet } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
+
 
 import Messages from './messages';
 import Textbar from './textbar';
@@ -22,7 +23,11 @@ export default function MainDisplay() {
             <SafeAreaView />
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
-                    <ThemedText>Uplift</ThemedText>
+                <Image
+                    source={require('@/assets/images/logo_small.png')}
+                    style={styles.upliftLogo}
+                    resizeMode="contain"
+                    />
                 </View>
                 
                 <LinearGradient 
@@ -102,4 +107,8 @@ const styles = StyleSheet.create({
         position: 'relative', 
         zIndex: 10,
     },
+
+    upliftLogo: {
+        width: 80,
+    }
 });

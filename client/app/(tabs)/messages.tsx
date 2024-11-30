@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
       flex: 1,
       flexDirection: 'column',
       justifyContent: 'center',
-      color: Colors.light.background,
+      color: '#FFFFFF',
     },
 
     spacer: {
@@ -60,13 +60,18 @@ const styles = StyleSheet.create({
       width: '70vw',
       aspectRatio: 2,
       flexDirection: 'row',
-      backgroundColor: Colors.light.text, // Background color
+      backgroundColor: '#000000', // Background color
       // justifyContent: 'center', // Align text vertically
       // alignItems: 'center', // Align text horizontally
       marginBottom: 5,
       borderRadius: 10, // Optional: rounded corners
       marginLeft: 15,
       // marginTop: 150
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.8,
+      shadowRadius: 2,  
+      elevation: 5
     },
     affirmation: {
       width: '80%',
