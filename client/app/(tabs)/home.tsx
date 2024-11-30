@@ -14,11 +14,18 @@ export default function home() {
             <SafeAreaView/>
             <View style={styles.mainContainer}>
             <View style={styles.spacer}/>
-            <ScrollView horizontal={true} style={styles.horizontalScroll} >
-            <View style={styles.affirmation}>
-            <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText>
+            <ScrollView horizontal={true} style={styles.horizontalScroll}>
+            <View style={styles.affirmation1}>
+            {/* <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText> */}
+            </View>
+            <View style={styles.affirmation1}>
+            {/* <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText> */}
             </View>
             </ScrollView>
+      
+            <View style={styles.affirmation}>
+
+            </View>
             <View style={styles.affirmation}>
 
             </View>
@@ -44,15 +51,25 @@ const styles = StyleSheet.create({
 
     horizontalScroll: {
       width: '80%',
-      height: '75%',
-      flexDirection: 'column',
-      marginBottom: 15,
+      height: '25%',
+      flexDirection: 'row',
+      marginBottom: 2,
     },
-  
+    affirmation1: {
+      width: 200,
+      height: 150,
+      flexDirection: 'row',
+      backgroundColor: '#000000', // Background color
+      // justifyContent: 'center', // Align text vertically
+      // alignItems: 'center', // Align text horizontally
+      marginBottom: 15,
+      borderRadius: 10, // Optional: rounded corners
+      marginLeft: 15
+    },
     affirmation: {
       width: '80%',
       height: '25%',
-      flexDirection: 'column',
+      flexDirection: 'row',
       backgroundColor: '#000000', // Background color
       // justifyContent: 'center', // Align text vertically
       // alignItems: 'center', // Align text horizontally
