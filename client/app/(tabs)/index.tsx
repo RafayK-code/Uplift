@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Platform, Button } from 'react-native';
+import { Image, StyleSheet, Platform, SafeAreaView, View, Pressable, TextInput,} from 'react-native';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -6,6 +6,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
+
+import { Button } from 'react-native';
+
+import { Colors } from '@/constants/Colors';
 
 export default function HomeScreen() {
   const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
@@ -31,25 +35,99 @@ export default function HomeScreen() {
   }, [isAuthenticated])
 
   return (
-    <Button title="Login" onPress={handleLogin} />
+    <ThemedView style={{ flex: 1 }}>
+      <SafeAreaView/>
+      <Button title="Login" onPress={handleLogin} />
+      <View style={styles.mainContainer}>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('@/assets/images/logo_small.png')}
+            style={styles.upliftLogo}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.loginContainer}>
+          <TextInput 
+            style = {styles.inputBox}
+            placeholder = 'Username' 
+            placeholderTextColor="#868CA9"
+          />
+          <TextInput 
+            style = {styles.inputBox}
+            secureTextEntry = {true}
+            placeholder = 'Password' 
+            placeholderTextColor="#868CA9"
+          />
+          
+          <Pressable style={({ pressed }) => pressed ? styles.loginBtnPressed : styles.loginBtn} onPress={handleLogin}>
+            <ThemedText style={styles.btnText}>Login</ThemedText>
+          </Pressable>
+          
+
+        </View>
+      </View>
+    </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
+  logoContainer: {
+    marginBottom: 10,
+  },
+  loginContainer: {
+    flex: 0.5,
+    width: '90%',
+    flexDirection: 'column',
     alignItems: 'center',
-    gap: 8,
+    padding: 10
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  upliftLogo: {
+    width: 100,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  mainContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
+  inputBox: {
+    height: 50,
+    width: '100%',
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 50,
+    backgroundColor: Colors.light.background,
+    borderStyle: 'solid',
+    borderColor: Colors.light.lightgrey,
+    borderWidth: 1.5,
+  },
+
+  loginBtn: {
+    height: 50,
+    borderRadius: 50,
+    width: '100%',
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.light.text
+  },
+
+  loginBtnPressed: {
+    height: 50,
+    borderRadius: 50,
+    width: '100%',
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: Colors.light.pink
+  },
+
+  btnText: {
+    color: 'white',
+  },
+
+  errorText: {
+    color: 'red',
+    marginTop: 10,
+  }
 });
