@@ -8,7 +8,7 @@ pub struct User {
     pub sub: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, FromRow)]
 pub struct GeneratedAffirmation {
     pub id: i32,
     pub user_id: String,

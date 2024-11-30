@@ -3,7 +3,7 @@ use std::{env, error::Error};
 use chrono::NaiveDateTime;
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
-use super::models::UserStreaks;
+use super::models::{GeneratedAffirmation, UserStreaks};
 
 pub type DbError = Box<dyn Error + Send + Sync>;
 pub type DbResult<T> = Result<T, DbError>;
@@ -52,6 +52,17 @@ pub async fn insert_generated_affirmation(pool: &Pool<Postgres>, sub: &String, c
     Ok(())
 }
 
+pub async fn get_all_generated_affirmations(pool: &Pool<Postgres>, sub: &String) -> DbResult<Vec<GeneratedAffirmation>> {
+    let rows = sqlx::query_as::<_, GeneratedAffirmation>(
+        "SELECT * FROM affirmations_generated WHERE user_id = $1 ORDER BY created_at DESC"
+    )
+    .bind(sub)
+    .fetch_all(pool)
+    .await?;
+
+    Ok(rows)
+}
+
 pub async fn get_user_streak(pool: &Pool<Postgres>, sub: &String) -> DbResult<UserStreaks> {
     let row = sqlx::query_as::<_, UserStreaks>(
         "SELECT * FROM user_streaks WHERE user_id = $1"
@@ -61,4 +72,25 @@ pub async fn get_user_streak(pool: &Pool<Postgres>, sub: &String) -> DbResult<Us
     .await?;
 
     Ok(row)
+}
+
+pub async fn update_user_streak(pool: &Pool<Postgres>, streaks: UserStreaks) -> DbResult<()> {
+    sqlx::query(
+        "UPDATE user_streaks SET current_streak = $1,
+            last_streak_date = $2,
+            longest_streak = $3,
+            affirmation_1 = $4,
+            affirmation_2 = $5,
+            affirmation_3 = $6 WHERE id = $7"
+    )
+    .bind(streaks.current_streak)
+    .bind(streaks.last_streak_date)
+    .bind(streaks.longest_streak)
+    .bind(streaks.affirmation_1)
+    .bind(streaks.affirmation_2)
+    .bind(streaks.affirmation_3)
+    .execute(pool)
+    .await?;
+
+    Ok(())
 }
