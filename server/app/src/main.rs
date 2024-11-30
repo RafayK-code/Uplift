@@ -1,4 +1,6 @@
 use axum::{routing::get, Router};
+use db::database;
+use dotenv::dotenv;
 use logger::LogLevel;
 
 async fn handler() -> &'static str {
@@ -6,10 +8,25 @@ async fn handler() -> &'static str {
 }
 
 pub mod logger;
+pub mod db;
 
 #[tokio::main]
 async fn main() {
-    
+    dotenv().ok();
+
+    let pool_result = database::create_pool().await;
+
+    let pool = match pool_result {
+        Ok(pool) => {
+            log_msg!("MAIN", LogLevel::Info, "Connection to database succsessful");
+            pool
+        }
+        Err(err) => {
+            log_msg!("MAIN", LogLevel::Crit, "Failed to connect to the database! {:?}", err);
+            std::process::exit(1);
+        }
+    };
+
     let app = Router::new()
         .route("/", get(handler));
 
