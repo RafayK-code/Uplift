@@ -14,10 +14,10 @@ FROM rust:latest
 WORKDIR /usr/src/app
 
 # Copy your Cargo.toml and Cargo.lock files
-COPY app/Cargo.toml app/Cargo.lock ./
+COPY Cargo.toml Cargo.lock ./
 
 # Copy the source code
-COPY app/src ./src
+COPY src ./src
 
 WORKDIR /usr/src/app
 
