@@ -1,7 +1,8 @@
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { StyleSheet, SafeAreaView, View, TextInput, Pressable } from 'react-native'
+import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, ScrollView } from 'react-native'
 
+const { width, height } = Dimensions.get('window');
 
 import MainDisplay from './maindisplay';
 
@@ -11,19 +12,18 @@ export default function home() {
     return (
         <ThemedView style={{ flex: 1 }}>
             <SafeAreaView/>
-            
-            {/*
-                        <LinearGradient
-          colors={['red', 'yellow', 'green' ]}
-          style={styles.linearGradient}
-        >
-          <ThemedText>Vertical Gradient</ThemedText>
-        </LinearGradient>
-             */}
             <View style={styles.mainContainer}>
-            
-            <MainDisplay/>
+            <View style={styles.spacer}/>
+            <ScrollView horizontal={true} style={styles.horizontalScroll} >
+            <View style={styles.affirmation}>
+            <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText>
             </View>
+            </ScrollView>
+            <View style={styles.affirmation}>
+
+            </View>
+            </View>
+            
         </ThemedView>
     );
 }
@@ -33,69 +33,31 @@ const styles = StyleSheet.create({
     mainContainer: {
       flex: 1,
       flexDirection: 'column',
-      alignItems: 'center',
+      // alignItems: 'center',
       justifyContent: 'center',
+      color: '#FFFFFF',
     },
-  
-    loginContainer: {
-      flex: 0.5,
-      width: '90%',
+
+    spacer: {
+      flex: 1
+    },
+
+    horizontalScroll: {
+      width: '80%',
+      height: '75%',
       flexDirection: 'column',
-      alignItems: 'center',
-      padding: 10
-    },
-  
-    titleContainer: {
-      flex: 2,
-      width: '60%',
       marginBottom: 15,
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'grey'
-    },
-    linearGradient: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 5,
-        height: 200,
-        width: 350,
-      },
-  
-    inputBox: {
-      height: 50,
-      width: '100%',
-      marginVertical: 10,
-      paddingHorizontal: 20,
-      borderRadius: 50,
-      backgroundColor: Colors.light.text,
     },
   
-    loginBtn: {
-      height: 50,
-      borderRadius: 50,
-      width: '100%',
-      marginVertical: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: Colors.light.text
-    },
-
-    loginBtnPressed: {
-      height: 50,
-      borderRadius: 50,
-      width: '100%',
-      marginVertical: 10,
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: Colors.light.text
-    },
-
-    btnText: {
-      color: 'white',
-    },
-
-    errorText: {
-      color: 'red',
-      marginTop: 10,
+    affirmation: {
+      width: '80%',
+      height: '25%',
+      flexDirection: 'column',
+      backgroundColor: '#000000', // Background color
+      // justifyContent: 'center', // Align text vertically
+      // alignItems: 'center', // Align text horizontally
+      marginBottom: 15,
+      borderRadius: 10, // Optional: rounded corners
+      marginLeft: 15
     }
 });
