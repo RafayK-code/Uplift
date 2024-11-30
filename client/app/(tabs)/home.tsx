@@ -3,6 +3,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { StyleSheet, SafeAreaView, View, TextInput, Pressable } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient';
 
+import MainDisplay from './maindisplay';
+
 import { Colors } from '@/constants/Colors';
 
 export default function home() {
@@ -10,13 +12,17 @@ export default function home() {
         <ThemedView style={{ flex: 1 }}>
             <SafeAreaView/>
             
-            <View style={styles.mainContainer}>
-            <LinearGradient
+            {/*
+                        <LinearGradient
           colors={['red', 'yellow', 'green' ]}
           style={styles.linearGradient}
         >
           <ThemedText>Vertical Gradient</ThemedText>
         </LinearGradient>
+             */}
+            <View style={styles.mainContainer}>
+            
+            <MainDisplay/>
             </View>
         </ThemedView>
     );
@@ -60,7 +66,7 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       paddingHorizontal: 20,
       borderRadius: 50,
-      backgroundColor: Colors.light.icon,
+      backgroundColor: Colors.light.text,
     },
   
     loginBtn: {
@@ -70,7 +76,7 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.light.tint
+      backgroundColor: Colors.light.text
     },
 
     loginBtnPressed: {
@@ -80,7 +86,7 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.light.icon
+      backgroundColor: Colors.light.text
     },
 
     btnText: {

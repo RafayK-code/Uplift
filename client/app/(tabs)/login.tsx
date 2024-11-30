@@ -13,15 +13,17 @@ export default function login() {
                 <View style={styles.loginContainer}>
 
                 <View style={styles.titleContainer}>
-                    <ThemedText>LOGO</ThemedText>
+                    <ThemedText>Uplift</ThemedText>
                 </View>
 
                 <TextInput style = {styles.inputBox}
-                placeholder = 'Username or Email' />
+                placeholder = 'Username' 
+                placeholderTextColor="#868CA9"/>
 
                 <TextInput style = {styles.inputBox}
                 secureTextEntry = {true}
-                placeholder = 'Password' />
+                placeholder = 'Password' 
+                placeholderTextColor="#868CA9"/>
 
                 <Pressable 
                 style={({ pressed }) =>
@@ -58,7 +60,6 @@ const styles = StyleSheet.create({
       marginBottom: 15,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: 'grey'
     },
   
     inputBox: {
@@ -67,7 +68,10 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       paddingHorizontal: 20,
       borderRadius: 50,
-      backgroundColor: Colors.light.icon,
+      backgroundColor: Colors.light.background,
+      borderStyle: 'solid',
+      borderColor: Colors.light.lightgrey,
+      borderWidth: 1.5,
     },
   
     loginBtn: {
@@ -77,7 +81,7 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.light.tint
+      backgroundColor: Colors.light.text
     },
 
     loginBtnPressed: {
