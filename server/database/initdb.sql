@@ -38,5 +38,5 @@ CREATE TABLE user_streaks(
     longest_streak INT DEFAULT 0
     affirmation_1 TEXT NOT NULL,
     affirmation_2 TEXT NOT NULL,
-    affirmation_3 TEXT NOT NULL,
+    affirmation_3 TEXT NOT NULL
 );
