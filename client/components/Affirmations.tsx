@@ -18,7 +18,7 @@ const Affirmation: React.FC<AffirmationProps> = ({ affirmationText }) =>  {
         start={{ x: 1, y: 0 }} // Gradient starts from the right
         end={{ x: 0, y: 1 }}   // Gradient ends towards the bottom left
     >
-      <ThemedText style={{ color: 'white' }}>{affirmationText}</ThemedText>
+      <ThemedText style={styles.textStyle}>{affirmationText}</ThemedText>
     </LinearGradient>
             
     );
@@ -36,6 +36,13 @@ const styles = StyleSheet.create({
       borderRadius: 10, // Optional: rounded corners
       marginLeft: 15,
       // marginTop: 150
+    },
+
+    textStyle: {
+        alignItems: 'center',
+        fontSize: 14,
+        lineHeight: 15,
+        textAlign: 'center'
     }
 });
 
