@@ -37,6 +37,7 @@ export default function MainDisplay() {
                     end={{ x: 0, y: 1 }}   // End at the bottom
                     style={styles.backgroundCircle} // Style for the gradient container
                 />
+                
                 <LinearGradient 
                     colors={['#FF87AD', '#C7CBFF', '#FFF']} // Gradient colors
                     locations={[0, 0.4203, 0.8757]} // Gradient positions
