@@ -7,8 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-import Messages from './messages';
-import Textbar from './textbar';
+import Messages from '../../components/messages';
+import Textbar from '../../components/textbar';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
