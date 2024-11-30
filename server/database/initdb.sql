@@ -1,5 +1,5 @@
 CREATE TABLE users(
-    sub VARCHAR(255) PRIMARY KEY,
+    sub VARCHAR(255) PRIMARY KEY
 );
 
 CREATE TABLE affirmations_generated(
