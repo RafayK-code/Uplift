@@ -35,7 +35,7 @@ CREATE TABLE user_streaks(
     user_id VARCHAR(255),
     current_streak INT DEFAULT 0,
     last_streak_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    longest_streak INT DEFAULT 0
+    longest_streak INT DEFAULT 0,
     affirmation_1 TEXT NOT NULL,
     affirmation_2 TEXT NOT NULL,
     affirmation_3 TEXT NOT NULL,
