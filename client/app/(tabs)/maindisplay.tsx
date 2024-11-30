@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from './messages';
 import Textbar from './textbar';
+import VoiceflowComponent from './voiceflow';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -49,6 +50,7 @@ export default function MainDisplay() {
                             <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
                         </View>
                         <View>
+                            <VoiceflowComponent/>
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
                     </View>

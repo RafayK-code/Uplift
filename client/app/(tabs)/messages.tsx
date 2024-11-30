@@ -6,6 +6,9 @@ import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState } from 'react';
 
+// voiceflow
+import React from 'react';
+import { useVoiceflow } from './useVoiceflow';
 
 
 export default function Messages() {
@@ -17,11 +20,11 @@ export default function Messages() {
 
 const renderAffirmation = ({ item }) => (
     <LinearGradient 
-  colors={[Colors.light.yellow, Colors.light.blue]} // Gradient colors
-  locations={[0.2785, 0.9698]} // Approximate percentage positions (27.85% and 96.98%)
-  style={styles.affirmation}
-  start={{ x: 1, y: 0 }} // Gradient starts from the right
-  end={{ x: 0, y: 1 }}   // Gradient ends towards the bottom left
+    colors={[Colors.light.yellow, Colors.light.blue]} 
+    locations={[0.2785, 0.9698]} 
+    style={styles.affirmation}
+    start={{ x: 1, y: 0 }} 
+    end={{ x: 0, y: 1 }}   
 >
   <View style={styles.affirmationDetails}>
   <ThemedText style={styles.affirmationText}>{item.text}</ThemedText>
