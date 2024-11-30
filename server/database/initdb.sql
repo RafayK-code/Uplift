@@ -6,7 +6,7 @@ CREATE TABLE affirmations_generated(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255),
     content TEXT NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(sub) ON DELETE RESTRICT
 );
 
@@ -15,8 +15,8 @@ CREATE TABLE affirmations_mail(
     sender_id VARCHAR(255),
     recipient_id VARCHAR(255),
     content TEXT NOT NULL,
-    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    reaction BOOLEAN DEFAULT FALSE,
+    sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    reaction BOOLEAN DEFAULT FALSE NOT NULL,
     FOREIGN KEY (sender_id) REFERENCES users(sub) ON DELETE RESTRICT,
     FOREIGN KEY (recipient_id) REFERENCES users(sub) ON DELETE RESTRICT
 );

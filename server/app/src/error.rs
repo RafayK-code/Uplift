@@ -7,6 +7,10 @@ pub type UpliftResult<T> = core::result::Result<T, UpliftError>;
 #[derive(Debug, PartialEq)]
 pub enum UpliftError {
     AuthFail,
+    AffirmationInsertFail,
+    AffirmationGetFail,
+    StreakGetFail,
+    StreakUpdateFail,
 }
 
 impl std::fmt::Display for UpliftError {
