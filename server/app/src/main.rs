@@ -2,13 +2,16 @@ use axum::{routing::get, Router};
 use db::database;
 use dotenv::dotenv;
 use logger::LogLevel;
+use web::middleware::validate_jwt_middleware;
 
 async fn handler() -> &'static str {
     "go away"
 }
 
 pub mod logger;
+pub mod error;
 pub mod db;
+pub mod web;
 
 #[tokio::main]
 async fn main() {
@@ -27,8 +30,10 @@ async fn main() {
         }
     };
 
+    // Create an Axum router with the JWT validation middleware
     let app = Router::new()
-        .route("/", get(handler));
+        .route("/", get(handler))
+        .layer(axum::middleware::from_fn_with_state(pool.clone(), validate_jwt_middleware));
 
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
     log_msg!("MAIN", LogLevel::Info, "Listening on http://{}", addr);
