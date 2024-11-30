@@ -6,6 +6,8 @@ import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import Affirmation from '../../components/Affirmations';
 
+
+
 export default function Messages() {
     return (
       <View style={styles.mainContainer}>

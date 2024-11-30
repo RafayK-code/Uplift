@@ -16,10 +16,6 @@ export default function Textbar() {
         }
 
         const timestamp = new Date();
-
-                //testing, can delete later
-                console.log("bruh")
-
         setText('');
 
     }   

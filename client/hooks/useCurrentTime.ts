@@ -14,10 +14,10 @@ export const useCurrentTime = () => {
             setTime(`Today @ ${formattedTime}`);
         };
 
-        updateTime(); // Set the initial time
-        const interval = setInterval(updateTime, 1000); // Update every second
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
 
-        return () => clearInterval(interval); // Cleanup on unmount
+        return () => clearInterval(interval); 
     }, []);
 
     return time;
