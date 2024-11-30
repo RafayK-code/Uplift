@@ -25,7 +25,7 @@ CREATE TABLE affirmations_reactions(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255),
     affirmation INT,
-    reacted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    reacted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(sub) ON DELETE CASCADE,
     FOREIGN KEY (affirmation) REFERENCES affirmations_mail(id) ON DELETE CASCADE
 );
