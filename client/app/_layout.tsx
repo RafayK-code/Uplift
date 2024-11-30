@@ -7,9 +7,27 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getConfig } from './config';
+import { Auth0Provider } from '@auth0/auth0-react';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+
+const onRedirectCallback = (appState: any) => {
+  
+};
+
+const config = getConfig();
+
+const providerConfig = {
+  domain: config.domain,
+  clientId: config.clientId,
+  onRedirectCallback,
+  authorizationParams: {
+    redirect_uri: config.redirect_uri,
+    audience: config.audience,
+  },
+};
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -28,6 +46,7 @@ export default function RootLayout() {
   }
 
   return (
+    <Auth0Provider {...providerConfig}>
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -35,5 +54,6 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+    </Auth0Provider>
   );
 }
