@@ -8,7 +8,6 @@ import { useState } from 'react';
 
 // voiceflow
 import React from 'react';
-import { useVoiceflow } from './useVoiceflow';
 
 
 export default function Messages() {
@@ -75,6 +74,7 @@ const renderAffirmation = ({ item }) => (
 const styles = StyleSheet.create({
 
     mainContainer: {
+      marginLeft: '10%',
       width: '100%',
       flex: 1,
       flexDirection: 'column',

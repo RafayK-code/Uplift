@@ -9,6 +9,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from '../../components/messages';
 import Textbar from '../../components/textbar';
+import VoiceflowComponent from './voiceflow';
+import Tinder from '../../components/Tinder'
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -50,9 +52,11 @@ export default function MainDisplay() {
                             <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
                         </View>
                         <View>
-                            <VoiceflowComponent/>
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
+
+                        <Tinder/>
+                        
                     </View>
                 </LinearGradient>
 
@@ -96,7 +100,7 @@ const styles = StyleSheet.create({
     },
 
     messageDisplay: {
-        fontSize: 25,
+        fontSize: 20,
         textAlign: 'center',
     },
 
@@ -118,7 +122,7 @@ const styles = StyleSheet.create({
     },
 
     upliftLogo: {
-        width: 80,
+        width: 60,
     },
 
     backgroundCircle: {
