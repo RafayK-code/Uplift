@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
       marginVertical: 10,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: Colors.light.icon
+      backgroundColor: Colors.light.pink
     },
 
     btnText: {

@@ -1,14 +1,10 @@
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, ScrollView } from 'react-native'
-
 const { width, height } = Dimensions.get('window');
-
-import MainDisplay from './maindisplay';
-
 import { Colors } from '@/constants/Colors';
 
-export default function home() {
+export default function Home() {
     return (
         <ThemedView style={{ flex: 1 }}>
             <SafeAreaView/>
