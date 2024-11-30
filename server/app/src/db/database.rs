@@ -13,3 +13,25 @@ pub async fn create_pool() -> DbResult<Pool<Postgres>> {
         Err(error) => Err(Box::new(error) as DbError)
     }
 }
+
+pub async fn insert_user(pool: &Pool<Postgres>, sub: String) -> DbResult<()> {
+    sqlx::query(
+        "INSERT INTO users (sub) VALUES ($1)"
+    )
+    .bind(sub)
+    .execute(pool)
+    .await?;
+
+    Ok(())
+}
+
+pub async fn user_exists(pool: &Pool<Postgres>, sub: String) -> DbResult<bool> {
+    let row = sqlx::query(
+        "SELECT * FROM users WHERE sub = $1"
+    )
+    .bind(sub)
+    .fetch_optional(pool)
+    .await?;
+
+    Ok(row.is_some())
+}
