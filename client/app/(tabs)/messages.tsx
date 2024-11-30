@@ -4,25 +4,27 @@ import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, Scrol
 const { width, height } = Dimensions.get('window');
 import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
-import Affirmation from '../../components/Affirmations';
 import { useState } from 'react';
 
 export default function Messages() {
   const [affirmations, setAffirmations] = useState([
-    { id: '1', text: 'You got this' },
-    { id: '2', text: 'You are amazing' },
-    { id: '3', text: 'You look confident' },
+    { id: '1', text: 'You got this' , date: '11/29/24 @ 2:00 PM'},
+    { id: '2', text: 'You are amazing', date: '11/26/24 @ 1:20 PM'},
+    { id: '3', text: 'You look confident', date: '11/10/24 @ 3:12 PM'},
 ]);
 
 const renderAffirmation = ({ item }) => (
-  <LinearGradient 
+    <LinearGradient 
   colors={[Colors.light.yellow, Colors.light.blue]} // Gradient colors
   locations={[0.2785, 0.9698]} // Approximate percentage positions (27.85% and 96.98%)
   style={styles.affirmation}
   start={{ x: 1, y: 0 }} // Gradient starts from the right
   end={{ x: 0, y: 1 }}   // Gradient ends towards the bottom left
 >
-        <ThemedText style={styles.affirmationText}>{item.text}</ThemedText>
+  <View style={styles.affirmationDetails}>
+  <ThemedText style={styles.affirmationText}>{item.text}</ThemedText>
+  <ThemedText style={styles.affirmationDate}>{item.date}</ThemedText>
+  </View>
     </LinearGradient>
 );
     return (
@@ -97,7 +99,12 @@ const styles = StyleSheet.create({
       marginRight: 15,
       justifyContent: 'center',
       alignItems: 'center',
+      shadowColor: 'rgba(0, 0, 0, 0.10)', // Shadow color
+        shadowOffset: { width: 4, height: 4 }, // Shadow offset (like x and y)
+        shadowOpacity: 1, // Opacity of the shadow
+        shadowRadius: 3, // Blur radius
       // marginTop: 150
+      
     },
     subtitle1: {
       flexDirection: 'column',
@@ -127,7 +134,21 @@ const styles = StyleSheet.create({
       lineHeight: 15,
       textAlign: 'center'
   },
+  affirmationDate: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: 10,
+    lineHeight: 15,
+    marginTop: 5,
+    textAlign: 'center'
+  },
+  affirmationDetails: {
+    width: '100%',
+    flexGrow: 1, // Allow ScrollView to expand based on content
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
   affirmationsList: {
-    marginLeft: 15
+    marginLeft: 1
   }
 });

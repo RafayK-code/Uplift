@@ -119,17 +119,6 @@ const styles = StyleSheet.create({
         width: 80,
     },
 
-    // backgroundCircle: {
-    //     position: 'absolute',
-    //     width: '140%', // Make the circle larger than the screen
-    //     aspectRatio: 1, // Ensures it stays a perfect circle
-    //     borderRadius: 500, // Rounds the edges fully to make it circular
-    //     marginTop: 95,
-    //     // top: '-5%', // Adjust vertical position (negative pushes it up)
-    //     // left: '-25%', // Center it horizontally
-    //     zIndex: -1, // Push it behind other elements
-    // },
-
     backgroundCircle: {
         position: 'absolute',
         width: '140%', // Make the circle larger than the screen
