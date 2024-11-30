@@ -7,9 +7,8 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
-import Messages from './messages';
-import Textbar from './textbar';
-import VoiceflowComponent from './voiceflow';
+import Messages from '../../components/messages';
+import Textbar from '../../components/textbar';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -38,6 +37,7 @@ export default function MainDisplay() {
                     end={{ x: 0, y: 1 }}   // End at the bottom
                     style={styles.backgroundCircle} // Style for the gradient container
                 />
+                
                 <LinearGradient 
                     colors={['#FF87AD', '#C7CBFF', '#FFF']} // Gradient colors
                     locations={[0, 0.4203, 0.8757]} // Gradient positions
