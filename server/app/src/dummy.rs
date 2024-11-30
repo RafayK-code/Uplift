@@ -1,3 +1,5 @@
+use std::env;
+
 use chrono::{Duration, Utc};
 use jsonwebtoken::{encode, Header, EncodingKey};
 use serde::{Serialize, Deserialize};
@@ -23,7 +25,8 @@ pub fn create_dummy_jwt() -> String {
     let header = Header::default();
 
     // Encode the JWT with your secret key (HS256 algorithm)
-    let secret = b"laQ8yy91qF3qiks8pSBktVLOUxmomQwqIhUsA-pCwviRb4hnnQXVYPR2bV1MnYGw";  // Replace with your actual secret
+    let secret = env::var("JWT_SECRET").expect("JWT_SECRET must be set");
+    let secret = secret.as_bytes(); // Replace with your actual secret
     let token = encode(&header, &claims, &EncodingKey::from_secret(secret))
         .expect("Failed to encode JWT");
 

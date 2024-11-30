@@ -19,6 +19,8 @@ COPY Cargo.toml Cargo.lock ./
 # Copy the source code
 COPY src ./src
 
+COPY dev-rg785djdlhv8xukf.pem ./dev-rg785djdlhv8xukf.pem
+
 WORKDIR /usr/src/app
 
 # Build dependencies

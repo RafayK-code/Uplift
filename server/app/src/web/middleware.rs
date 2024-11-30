@@ -1,69 +1,101 @@
 use axum::{
-    async_trait, extract::{FromRequest, FromRequestParts}, http::{HeaderMap, Request, StatusCode}, middleware::Next, response::{IntoResponse, Response}
+    async_trait,
+    extract::{FromRequest, FromRequestParts},
+    http::{HeaderMap, StatusCode},
+    response::{IntoResponse, Response},
+    middleware::{self, Next},
+    Router,
+    routing::get,
 };
-use jsonwebtoken::{decode, DecodingKey, Validation, Algorithm, TokenData};
-use serde::{Serialize, Deserialize};
-use crate::{error::{UpliftError, UpliftResult}, log_msg, logger::LogLevel};  // Import your custom error handling
+use jsonwebtoken::{decode, decode_header, DecodingKey, Validation, Algorithm};
+use reqwest::Client;
+use serde::{Deserialize, Serialize};
+use std::fs;
+use std::sync::Arc;
+use axum::middleware::from_fn;
 
-#[derive(Debug, Deserialize, Serialize)]
+#[derive(Debug, Serialize, Deserialize)]
 struct Claims {
-    sub: String,  // Subject claim (the user id or whatever)
-    aud: String,  // Audience claim (your API or service name)
-    iss: String,  // Issuer claim (your Auth0 URL)
-    exp: usize,   // Expiration time
+    sub: String,
+    exp: usize,
+    // Add other fields based on your needs
 }
 
-pub async fn jwt_auth<B>(req: Request<B>, next: Next<B>) -> UpliftResult<Response> {
-    // Extract the authorization header
-    let auth_header = req
-        .headers()
-        .get("Authorization")
-        .ok_or(UpliftError::AuthFail)? // If no Authorization header, return AuthFail
-        .to_str()
-        .map_err(|_| UpliftError::AuthFail)?;
+#[derive(Debug)]
+pub struct AuthError(pub String);
 
-    log_msg!("MIDDLEWARE", LogLevel::Info, "valid authorization header");
+impl IntoResponse for AuthError {
+    fn into_response(self) -> Response {
+        (StatusCode::UNAUTHORIZED, self.0).into_response()
+    }
+}
 
-    // Ensure the header starts with "Bearer "
-    if !auth_header.starts_with("Bearer ") {
-        log_msg!("MIDDLEWARE", LogLevel::Error, "no bearer token");
-        return Err(UpliftError::AuthFail);
+#[derive(Clone)]
+pub struct JwtMiddleware {
+    pub public_key_path: String,  // Path to the PEM file with the public key
+}
+
+impl JwtMiddleware {
+    // Load the public key from the PEM file
+    pub fn load_public_key(&self) -> Result<DecodingKey, AuthError> {
+        let public_key_pem = fs::read_to_string(&self.public_key_path)
+            .map_err(|e| AuthError(format!("Failed to read PEM file: {}", e)))?;
+        
+        let public_key = DecodingKey::from_rsa_pem(public_key_pem.as_bytes())
+            .map_err(|e| AuthError(format!("Failed to parse PEM public key: {}", e)))?;
+
+        Ok(public_key)
     }
 
-    // Extract the token part
-    let token = auth_header.trim_start_matches("Bearer ").to_string();
+    // Validate JWT using the loaded public key
+    pub fn validate_jwt(&self, token: &str) -> Result<Claims, AuthError> {
+        // Decode the JWT header to get the 'kid'
+        let header = decode_header(token)
+            .map_err(|e| AuthError(format!("Failed to decode JWT header: {}", e)))?;
 
-    // Validate the token (we'll use HS256 with your Auth0 secret)
-    validate_jwt(&token).await?;
+        let _kid = header.kid
+            .ok_or_else(|| AuthError("No 'kid' in JWT header".to_string()))?;
 
-    // Continue with the request handling if the token is valid
-    Ok(next.run(req).await)
+        // Load the public key from PEM file
+        let public_key = self.load_public_key()?;
+
+        // Validate JWT with the public key and RS256 algorithm
+        let mut validation = Validation::new(Algorithm::RS256);
+        validation.set_audience(&["http://localhost:8080/", "https://dev-rg785djdlhv8xukf.ca.auth0.com/userinfo"]);
+        validation.set_issuer(&["https://dev-rg785djdlhv8xukf.ca.auth0.com/"]);
+
+        let decoded = decode::<Claims>(
+            token,
+            &public_key,
+            &validation,
+        )
+        .map_err(|e| AuthError(format!("JWT validation failed: {}", e)))?;
+
+        Ok(decoded.claims)
+    }
 }
 
-// Helper function to validate the JWT
-async fn validate_jwt(token: &str) -> UpliftResult<()> {
-    let secret = b"laQ8yy91qF3qiks8pSBktVLOUxmomQwqIhUsA-pCwviRb4hnnQXVYPR2bV1MnYGw";  // Replace with your actual Auth0 client secret
-
-    // Set up validation with HS256 (your Auth0 signing algorithm)
-    let mut validation = Validation::new(Algorithm::HS256);
-    validation.set_audience(&["http://localhost:8080/"]);
-    validation.set_issuer(&["https://dev-rg785djdlhv8xukf.ca.auth0.com/"]);
-
-    // Decode and validate the token using the secret (HS256)
-    let result  = decode::<Claims>(
-        token,
-        &DecodingKey::from_secret(secret),
-        &validation,
-    );  // If decoding fails, return AuthFail
-
-    match result {
-        Ok(_) => (),
-        Err(err) => {
-            log_msg!("MIDDLEWARE", LogLevel::Error, "Could not decode JWT: {:?}", err);
-            return Err(UpliftError::AuthFail);
+// Extract JWT from the Authorization header
+async fn jwt_from_header<B>(req: &axum::http::Request<B>) -> Result<String, AuthError> {
+    if let Some(auth_header) = req.headers().get("Authorization") {
+        if let Ok(auth_value) = auth_header.to_str() {
+            if auth_value.starts_with("Bearer ") {
+                return Ok(auth_value[7..].to_string());
+            }
         }
     }
+    Err(AuthError("Authorization header missing or invalid".to_string()))
+}
 
-    // If decoding is successful, everything is good, return Ok
-    Ok(())
+// Middleware to validate JWT for every request
+pub async fn validate_jwt_middleware<B>(req: axum::http::Request<B>, jwt_middleware: JwtMiddleware, next: Next<B>) -> impl IntoResponse {
+    match jwt_from_header(&req).await {
+        Ok(token) => {
+            match jwt_middleware.validate_jwt(&token) {
+                Ok(_) => next.run(req).await,
+                Err(e) => (StatusCode::UNAUTHORIZED, e.0).into_response(),
+            }
+        }
+        Err(e) => (StatusCode::UNAUTHORIZED, e.0).into_response(),
+    }
 }
