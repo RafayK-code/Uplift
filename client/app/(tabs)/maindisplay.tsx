@@ -5,7 +5,7 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ScrollView } from 'react-native-gesture-handler';
 
-import Home from './home';
+import Messages from './messages';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -35,19 +35,7 @@ export default function MainDisplay() {
                 </View>
 
                 <View style={styles.otherDisplay}>
-                    <View>
-                        <ThemedText>From Us</ThemedText>
-                        <View>
-                            <ThemedText>Msg1</ThemedText>
-                        </View>
-                    </View>
-
-                    <View>
-                        <ThemedText>From Others</ThemedText>
-                        <View>
-                            <ThemedText>Msg1</ThemedText>
-                        </View>
-                    </View>
+                    <Messages/>
                 </View>
             </ScrollView>
         </ThemedView>
@@ -97,10 +85,7 @@ const styles = StyleSheet.create({
     otherDisplay: {
         flex: 2,
         width: '100%',
-        height: 100, 
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
-        borderRadius: 10,
-        padding: 10,
         justifyContent: 'center', 
         alignItems: 'center',
         marginTop: 0,

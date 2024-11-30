@@ -4,12 +4,9 @@ import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, Scrol
 const { width, height } = Dimensions.get('window');
 import { Colors } from '@/constants/Colors';
 
-export default function Home() {
+export default function Messages() {
     return (
-        <ThemedView style={{ flex: 1 }}>
-            <SafeAreaView/>
-            <View style={styles.mainContainer}>
-            <ScrollView style={styles.whole}>
+      <View style={styles.mainContainer}>
             <View style={styles.spacer}/>
             <View style={styles.section1}>
             <ThemedText style={styles.subtitle1}>
@@ -39,27 +36,18 @@ export default function Home() {
             </View>
             </ScrollView>
             </View>
+          
+      </View>
             
-            </ScrollView>
-      
-            {/* <View style={styles.affirmation}>
-
-            </View>
-            <View style={styles.affirmation}>
-
-            </View> */}
-            </View>
-            
-        </ThemedView>
     );
 }
 
 const styles = StyleSheet.create({
 
     mainContainer: {
+      width: '100%',
       flex: 1,
       flexDirection: 'column',
-      // alignItems: 'center',
       justifyContent: 'center',
       color: '#FFFFFF',
     },
@@ -75,8 +63,8 @@ const styles = StyleSheet.create({
       marginBottom: 5,
     },
     affirmation1: {
-      width: width * .8,
-      height: height*.25,
+      width: '70vw',
+      aspectRatio: 2,
       flexDirection: 'row',
       backgroundColor: '#000000', // Background color
       // justifyContent: 'center', // Align text vertically
@@ -104,12 +92,9 @@ const styles = StyleSheet.create({
       marginLeft: 15
     },
     section1: {
-      marginTop: 390,
       flexDirection: 'column'
     },
-    whole:{
-      flex: 1
-    },
+
     section2: {
       marginTop: 15,
       flexDirection: 'column'
