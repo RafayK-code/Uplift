@@ -1,5 +1,6 @@
 use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
+use sqlx::prelude::FromRow;
 
 #[derive(Serialize, Deserialize)]
 
@@ -26,7 +27,7 @@ pub struct MailedAffirmation {
     pub reaction: bool,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, FromRow)]
 
 pub struct UserStreaks {
     pub id: i32,

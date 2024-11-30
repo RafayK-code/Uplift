@@ -1,4 +1,4 @@
-use axum::{body::Body, extract::State, http::StatusCode, middleware::{self, Next}, response::IntoResponse, routing::get, Router};
+use axum::{routing::get, Router};
 use db::database;
 use dotenv::dotenv;
 use logger::LogLevel;

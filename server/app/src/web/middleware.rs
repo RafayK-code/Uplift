@@ -15,15 +15,16 @@ pub struct Claims {
 }
 
 // Middleware to validate JWT for every request
-pub async fn validate_jwt_middleware<B>(State(pool): State<PgPool>, req: axum::http::Request<B>, next: Next<B>) -> UpliftResult<Response> {
+pub async fn validate_jwt_middleware<B>(State(pool): State<PgPool>, mut req: axum::http::Request<B>, next: Next<B>) -> UpliftResult<Response> {
     match jwt_from_header(&req).await {
         Ok(token) => {
             match validate_jwt(&token) {
                 Ok(claims) => {
                     let exists = database::user_exists(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     if !exists {
-                        database::insert_user(&pool, claims.sub).await.map_err(|_| UpliftError::AuthFail)?;
+                        database::insert_user(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     }
+                    req.extensions_mut().insert(claims.sub);
                     Ok(next.run(req).await)
                 },
                 Err(e) => Err(e)
