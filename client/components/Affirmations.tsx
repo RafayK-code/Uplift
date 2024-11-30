@@ -36,6 +36,10 @@ const styles = StyleSheet.create({
       borderRadius: 10, // Optional: rounded corners
       marginLeft: 15,
       // marginTop: 150
+    },
+
+    textStyle: {
+        alignItems: 'center'
     }
 });
 

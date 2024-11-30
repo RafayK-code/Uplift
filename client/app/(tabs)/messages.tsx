@@ -18,6 +18,9 @@ export default function Messages() {
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
               <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+              <ThemedText style={styles.toGallery}>See All</ThemedText>
             </ScrollView>
             </View>
             <View style={styles.section2}>
@@ -26,6 +29,9 @@ export default function Messages() {
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
             
+            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
             <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
             <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
             </ScrollView>
@@ -93,4 +99,11 @@ const styles = StyleSheet.create({
       marginTop: 15,
       flexDirection: 'column'
     },
+
+    toGallery: {
+      color: Colors.dark.text,
+      marginLeft: 15,
+      alignItems: 'center',
+      flex: 1
+    }
 });
