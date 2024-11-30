@@ -1,14 +1,19 @@
-use axum::{routing::get, Router};
+use axum::{routing::get, middleware, Router};
 use db::database;
 use dotenv::dotenv;
+use dummy::create_dummy_jwt;
 use logger::LogLevel;
+use web::middleware::jwt_auth;
 
 async fn handler() -> &'static str {
     "go away"
 }
 
 pub mod logger;
+pub mod error;
 pub mod db;
+pub mod web;
+pub mod dummy;
 
 #[tokio::main]
 async fn main() {
@@ -27,8 +32,11 @@ async fn main() {
         }
     };
 
+    log_msg!("MAIN", LogLevel::Info, "Dummy token: {}", create_dummy_jwt());
+
     let app = Router::new()
-        .route("/", get(handler));
+        .route("/", get(handler))
+        .layer(middleware::from_fn(jwt_auth));
 
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
     log_msg!("MAIN", LogLevel::Info, "Listening on http://{}", addr);
