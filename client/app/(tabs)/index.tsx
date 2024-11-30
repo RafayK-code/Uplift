@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import { Button } from 'react-native';
 
@@ -37,58 +38,65 @@ export default function HomeScreen() {
   return (
     <ThemedView style={{ flex: 1 }}>
       <SafeAreaView/>
-      <Button title="Login" onPress={handleLogin} />
-      <View style={styles.mainContainer}>
+      <LinearGradient
+      colors={['#FFF', '#B2E3FA', '#FFF186']} // Gradient colors
+      locations={[0.3831, 0.7473, 1]} // Corresponding positions as decimals
+      style={styles.gradientBackground} // Apply gradient as background
+    >
+      
+      
+        <View style={styles.logos}>
         <View style={styles.logoContainer}>
           <Image
-            source={require('@/assets/images/logo_small.png')}
+            source={require('@/assets/images/logo_colour.png')}
             style={styles.upliftLogo}
             resizeMode="contain"
           />
         </View>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('@/assets/images/logo_colour.png')}
+            style={[styles.upliftLogo, { opacity: 0.35 }]}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={styles.logoContainer}>
+          <Image
+            source={require('@/assets/images/logo_colour.png')}
+            style={[styles.upliftLogo, { opacity: 0.1 }]}
+            resizeMode="contain"
+          />
+        </View>
+        </View>
+        <View style={styles.caption}>
+        <ThemedText style={styles.message}>Empowering words to brighten your day, one affirmation at a time</ThemedText>
+        </View>
         <View style={styles.loginContainer}>
-          <TextInput 
-            style = {styles.inputBox}
-            placeholder = 'Username' 
-            placeholderTextColor="#868CA9"
-          />
-          <TextInput 
-            style = {styles.inputBox}
-            secureTextEntry = {true}
-            placeholder = 'Password' 
-            placeholderTextColor="#868CA9"
-          />
-          
           <Pressable style={({ pressed }) => pressed ? styles.loginBtnPressed : styles.loginBtn} onPress={handleLogin}>
-            <ThemedText style={styles.btnText}>Login</ThemedText>
+            <ThemedText style={styles.btnText}>Begin →</ThemedText>
           </Pressable>
           
 
         </View>
-      </View>
+      </LinearGradient>
     </ThemedView>
   );
 }
 
 const styles = StyleSheet.create({
   logoContainer: {
-    marginBottom: 10,
+    marginBottom: 5,
   },
   loginContainer: {
     flex: 0.5,
     width: '90%',
     flexDirection: 'column',
     alignItems: 'center',
-    padding: 10
+    padding: 10,
+    marginBottom: "-40%"
   },
   upliftLogo: {
-    width: 100,
-  },
-  mainContainer: {
-    flex: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    width: 180,
   },
   inputBox: {
     height: 50,
@@ -104,7 +112,7 @@ const styles = StyleSheet.create({
 
   loginBtn: {
     height: 50,
-    borderRadius: 50,
+    borderRadius: 8,
     width: '100%',
     marginVertical: 10,
     justifyContent: 'center',
@@ -114,7 +122,7 @@ const styles = StyleSheet.create({
 
   loginBtnPressed: {
     height: 50,
-    borderRadius: 50,
+    borderRadius: 8,
     width: '100%',
     marginVertical: 10,
     justifyContent: 'center',
@@ -129,5 +137,38 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginTop: 10,
-  }
+  },
+  backgroundCircle: {
+    position: 'absolute',
+    width: '140%', // Make the circle larger than the screen
+    aspectRatio: 1, // Ensures it stays a perfect circle
+    borderRadius: 500, // Rounds the edges fully to make it circular
+    // marginTop: 95,
+    top: '-15%', // Adjust vertical position (negative pushes it up)
+    left: '-25%', // Center it horizontally
+    zIndex: -1, // Push it behind other elements
+},
+gradientBackground: {
+  flex: 1, // Take up the full screen height
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+},
+logos: {
+  flex: 1, // Take up the full screen height
+  justifyContent: 'center',
+  alignItems: 'center',
+  flexDirection: 'column',
+  marginTop: 75
+},
+message: {
+  textAlign: 'center',
+  fontSize: 14,
+  fontStyle: 'italic'
+},
+caption: {
+  textAlign: 'center',
+  padding: 20,
+  marginBottom: '-10%'
+}
 });
