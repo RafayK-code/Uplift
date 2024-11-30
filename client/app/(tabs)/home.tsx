@@ -1,24 +1,22 @@
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { StyleSheet, SafeAreaView, View, TextInput, Pressable } from 'react-native'
-// import LinearGradient from 'react-native-linear-gradient';
+import LinearGradient from 'react-native-linear-gradient';
 
 import { Colors } from '@/constants/Colors';
- 
+
 export default function home() {
     return (
         <ThemedView style={{ flex: 1 }}>
             <SafeAreaView/>
             
             <View style={styles.mainContainer}>
-            {/* <LinearGradient
-            colors={['#4c669f', '#3b5998', '#192f6a']}
-            start={{x: 0, y: 0}}
-            end={{x: 1, y: 1}}
-            style={{flex: 1}}
-    >
-      <ThemedText>Hello, Gradient!</ThemedText>
-    </LinearGradient> */}
+            <LinearGradient
+          colors={['red', 'yellow', 'green' ]}
+          style={styles.linearGradient}
+        >
+          <ThemedText>Vertical Gradient</ThemedText>
+        </LinearGradient>
             </View>
         </ThemedView>
     );
@@ -48,6 +46,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       backgroundColor: 'grey'
     },
+    linearGradient: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 5,
+        height: 200,
+        width: 350,
+      },
   
     inputBox: {
       height: 50,
