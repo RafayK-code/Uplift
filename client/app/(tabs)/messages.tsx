@@ -3,6 +3,8 @@ import { ThemedText } from '@/components/ThemedText';
 import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, ScrollView } from 'react-native'
 const { width, height } = Dimensions.get('window');
 import { Colors } from '@/constants/Colors';
+import { LinearGradient } from 'expo-linear-gradient';
+import Affirmation from '../../components/Affirmations';
 
 export default function Messages() {
     return (
@@ -13,13 +15,9 @@ export default function Messages() {
               For You
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
-            
-            <View style={styles.affirmation1}>
-            <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText>
-            </View>
-            <View style={styles.affirmation1}>
-            {/* <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText> */}
-            </View>
+              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+              <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
             </ScrollView>
             </View>
             <View style={styles.section2}>
@@ -28,12 +26,8 @@ export default function Messages() {
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
             
-            <View style={styles.affirmation1}>
-            <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText>
-            </View>
-            <View style={styles.affirmation1}>
-            {/* <ThemedText style={{ color: 'white' }}>Affirmation 1</ThemedText> */}
-            </View>
+            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
+            <Affirmation affirmationText="I am capable of achieving anything I set my mind to!"/>
             </ScrollView>
             </View>
           

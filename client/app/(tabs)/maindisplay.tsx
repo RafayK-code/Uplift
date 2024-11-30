@@ -4,6 +4,7 @@ import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ScrollView } from 'react-native-gesture-handler';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from './messages';
 
@@ -22,8 +23,14 @@ export default function MainDisplay() {
                 <View style={styles.logoContainer}>
                     <ThemedText>Uplift</ThemedText>
                 </View>
-
-                <View style={styles.circleMain}>
+                
+                <LinearGradient 
+                    colors={['#FF87AD', '#C7CBFF', '#FFF']} // Gradient colors
+                    locations={[0, 0.4203, 0.8757]} // Gradient positions
+                    style={styles.circleMain}
+                    start={{ x: 0, y: 0 }} // Start at the top
+                    end={{ x: 0, y: 1 }}   // End at the bottom
+                >
                     <View style={styles.messageContainer}>
                         <View>
                             <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
@@ -32,7 +39,7 @@ export default function MainDisplay() {
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
                     </View>
-                </View>
+                </LinearGradient>
 
                 <View style={styles.otherDisplay}>
                     <Messages/>
@@ -61,7 +68,7 @@ const styles = StyleSheet.create({
         borderRadius: 500,
         backgroundColor: Colors.light.pink,
         marginBottom: '-40%', 
-        zIndex: 1, 
+        zIndex: 1,
     },
 
     messageContainer: {
