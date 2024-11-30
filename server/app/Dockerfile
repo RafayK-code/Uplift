@@ -1,5 +1,5 @@
 # syntax=docker/dockerfile:1
-
+#test
 # Comments are provided throughout this file to help you get started.
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/engine/reference/builder/
@@ -18,6 +18,8 @@ COPY Cargo.toml Cargo.lock ./
 
 # Copy the source code
 COPY src ./src
+
+COPY dev-rg785djdlhv8xukf.pem ./dev-rg785djdlhv8xukf.pem
 
 WORKDIR /usr/src/app
 
