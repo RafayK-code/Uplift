@@ -1,6 +1,6 @@
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { StyleSheet, SafeAreaView, View, TextInput, Pressable } from 'react-native'
+import { Image, StyleSheet, SafeAreaView, View, TextInput, Pressable } from 'react-native'
 
 import { Colors } from '@/constants/Colors';
  
@@ -13,8 +13,16 @@ export default function login() {
                 <View style={styles.loginContainer}>
 
                 <View style={styles.titleContainer}>
-                    <ThemedText>Uplift</ThemedText>
+                <Image
+                    source={require('@/assets/images/logo_small.png')}
+                    style={styles.upliftLogo}
+                    resizeMode="contain"
+                    />
                 </View>
+
+                {/* <View style={styles.titleContainer}>
+                    <ThemedText>Uplift</ThemedText>
+                </View> */}
 
                 <TextInput style = {styles.inputBox}
                 placeholder = 'Username' 
@@ -39,6 +47,9 @@ export default function login() {
 }
 
 const styles = StyleSheet.create({
+  logoContainer1: {
+    marginBottom: 20,
+},
     mainContainer: {
       flex: 1,
       flexDirection: 'column',
@@ -101,5 +112,9 @@ const styles = StyleSheet.create({
     errorText: {
       color: 'red',
       marginTop: 10,
-    }
+    },
+
+    upliftLogo: {
+      width: 80,
+  },
 });
