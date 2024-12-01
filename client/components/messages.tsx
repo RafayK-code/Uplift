@@ -4,7 +4,7 @@ import { StyleSheet, SafeAreaView, View, TextInput, Pressable, Dimensions, Scrol
 const { width, height } = Dimensions.get('window');
 import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
-import Affirmation from '../../components/Affirmations';
+import Affirmation from './Affirmations';
 import { useState } from 'react';
 
 export default function Messages() {

@@ -23,13 +23,6 @@ export default function MainDisplay() {
         
         <ThemedView style={{ flex: 1 }}>
             <SafeAreaView />
-            <View style={styles.userView}>
-            <Image
-                    source={require('@/assets/images/user-profile.svg')}
-                    style={styles.user}
-                    resizeMode="contain"
-                    />
-            </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
@@ -148,13 +141,6 @@ const styles = StyleSheet.create({
         left: '-25%', // Center it horizontally
         zIndex: -1, // Push it behind other elements
     },
-    user: {
-        width: 50,
-        marginBottom: 10
-    },
-    userView: {
-        marginLeft: "80%",
-        marginTop: '5%'
-    }
+
 
 });
