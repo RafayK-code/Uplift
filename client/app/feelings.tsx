@@ -74,15 +74,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // justifyContent: 'space-between',
         paddingHorizontal: 15,
-        height: '80%'
+        height: '20%', 
+        width: '80%'
     },
 
     inputBox: {
         flex: 1,
-        height: '5%',
-        width: '60%',
+        width: '100%',
         top: '0%',
         bottom: '90%'
+        
     },
 
     sendButton: {
@@ -135,6 +136,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     title: {
+        color: '#30397F',
         fontSize: 20,
         marginBottom: 5,
         padding: 20,

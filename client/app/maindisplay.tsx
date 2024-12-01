@@ -187,18 +187,6 @@ export default function MainDisplay() {
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb}/>
             </View>
-            <View style={styles.userView}>
-            
-            <Pressable onPress={handleUserProfilePress}>
-                    <Image
-                        source={require('@/assets/images/user-profile.svg')}
-                        style={styles.icon}
-                        resizeMode="contain"
-                    />
-                    <ThemedText>Dawg</ThemedText>
-                    
-                </Pressable>
-                </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
