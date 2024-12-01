@@ -23,10 +23,17 @@ export default function MainDisplay() {
         
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
+            <View style={styles.toolsView}>
+            <Image
+                    source={require('@/assets/images/tools.svg')}
+                    style={styles.icon}
+                    resizeMode="contain"
+                    />
+            </View>
             <View style={styles.userView}>
             <Image
                     source={require('@/assets/images/user-profile.svg')}
-                    style={styles.user}
+                    style={styles.icon}
                     resizeMode="contain"
                     />
             </View>
@@ -137,7 +144,7 @@ const styles = StyleSheet.create({
         left: '-25%', // Center it horizontally
         zIndex: -1, // Push it behind other elements
     },
-    user: {
+    icon: {
         width: 50,
         marginBottom: 10
     },
@@ -147,6 +154,19 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: '5%',
         right: '-2%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    toolsView: {
+        // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '5%',
+        left: '-2%',
         zIndex: 1000,
         // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
         borderRadius: 25,
