@@ -133,7 +133,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
-    marginBottom: "-40%"
+    // marginBottom: "-40%"
+    // marginBottom: "-40%"
   },
   upliftLogo: {
     width: 180,
