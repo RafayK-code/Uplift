@@ -1,4 +1,4 @@
-import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, FlatList } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, FlatList, Button, Modal } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
@@ -12,8 +12,21 @@ import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
 import { BlurView } from 'expo-blur';
 import { AffirmationHistoryItem, useGenAffirmations } from '@/hooks/useGenAffirmations';
+import { MailAffirmationHistoryItem, useMailAffirmations } from '@/hooks/useMailAffirmations';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function MainDisplay() {
+
+    // State to manage the visibility of the popup
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    // Function to show the modal
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
+    // Function to hide the modal
+    const hideModal = () => {
+        setIsModalVisible(false);
+    };
 
     const currentTime = useCurrentTime();
 
@@ -36,6 +49,12 @@ export default function MainDisplay() {
         sendNewAffirmation,
         affirmationHistoryResponseData,
     } = useGenAffirmations();
+
+    const {
+        getAffirmationMail,
+        sendNewMailAffirmation,
+        affirmationMailResponseData,
+    } = useMailAffirmations();
 
     // Handle new affirmation submission
     const handleNewAffirmation = async (newAffirmation: string) => {
@@ -72,6 +91,7 @@ export default function MainDisplay() {
     };
 
     const sendMessage = async () => {
+        setIsModalVisible(false);
         // empty message
         if (text.trim().length === 0) {
             Alert.alert('Error', 'Empty Message');
@@ -92,15 +112,31 @@ export default function MainDisplay() {
             createdAt: createdAt,
         }); 
     }
+
+    const onPressSelfCb = async () => {
+        setIsModalVisible(false);
+        await handleNewAffirmation(text);
+    }
+
+    const onPressMailCb = async () => {
+        setIsModalVisible(false);
+        await sendNewMailAffirmation({
+            content: text,
+            sentAt: new Date(),
+        }); 
+    }
     
     useEffect(() => {
         getStreakInfo();
         getAffirmationHistory();
+        getAffirmationMail();
     }, [])
 
     useEffect(() => {
         setCurrentStreak(streakResponseData?.currentStreak || 0);
     }, [streakResponseData])
+
+    const { logout } = useAuth0();
 
     const renderAffirmation = ({ item }: { item: AffirmationHistoryItem }) => (
         <LinearGradient 
@@ -113,6 +149,20 @@ export default function MainDisplay() {
       <View style={styles.affirmationDetails}>
       <ThemedText style={styles.affirmationText}>{item.content}</ThemedText>
       <ThemedText style={styles.affirmationDate}>{item.createdAt.toLocaleDateString()}</ThemedText>
+      </View>
+        </LinearGradient>
+    );
+    const renderMailAffirmation = ({ item }: { item: MailAffirmationHistoryItem }) => (
+        <LinearGradient 
+        colors={[Colors.light.yellow, Colors.light.blue]} 
+        locations={[0.2785, 0.9698]} 
+        style={styles.affirmation}
+        start={{ x: 1, y: 0 }} 
+        end={{ x: 0, y: 1 }}   
+    >
+      <View style={styles.affirmationDetails}>
+      <ThemedText style={styles.affirmationText}>{item.content}</ThemedText>
+      <ThemedText style={styles.affirmationDate}>{item.sentAt.toLocaleDateString()}</ThemedText>
       </View>
         </LinearGradient>
     );
@@ -230,6 +280,23 @@ export default function MainDisplay() {
                         />
                     </ScrollView>
                     </View>
+
+                    <View style={styles.section2}>
+                    <ThemedText style={styles.subtitle1}>
+                      Affirmations From Others
+                    </ThemedText>
+                    <ScrollView horizontal={true} style={styles.horizontalScroll}>
+                    <FlatList
+                            data={affirmationMailResponseData ? affirmationMailResponseData.items : []} // Data array for affirmations
+                            renderItem={renderMailAffirmation} // Render each affirmation
+                            keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
+                            horizontal={true} // Enables horizontal scrolling
+                            showsHorizontalScrollIndicator={false} // Hides scroll bar
+                            contentContainerStyle={styles.affirmationsList}
+                            ListEmptyComponent={renderEmptyAffirmationBox}
+                        />
+                    </ScrollView>
+                    </View>
           
                     </View>
                 </View>
@@ -248,10 +315,37 @@ export default function MainDisplay() {
                             />
                             <Pressable 
                             style={styles.sendButton}
-                            onPress ={sendMessage}
+                            onPress ={showModal}
                             >
                                 <Text style={styles.sendText}>→</Text>
                             </Pressable>
+                            <Modal
+                visible={isModalVisible}        // Modal visibility state
+                transparent={true}              // Make the background semi-transparent
+                onRequestClose={hideModal}       // Handle back press (close modal)
+            >
+                <View style={styles.modalBackground}>
+                    <View style={styles.modalContent}>
+                        <ThemedText style={styles.modalText}>Who would you like to send this to?</ThemedText>
+                        {/* <Button style={styles.modalRButton} title="To Yourself" onPress={hideModal} color= 'rgba(48, 57, 127, 1)'/> */}
+                            <View style={styles.modalButtons}>
+                            <Pressable onPress={onPressSelfCb} style={styles.modalLButton}>
+
+                                <ThemedText style={styles.youButton}>To You</ThemedText>
+                            </Pressable>
+                            <Pressable onPress={onPressMailCb} style={styles.modalRButton}>
+
+                            <ThemedText style={styles.youButton}>To a Friend</ThemedText>
+                            </Pressable>
+                            </View>
+                            
+                        
+                            {/* <Pressable style={styles.sendButton} onPress={showModal}>
+    <Text style={styles.sendText}>→</Text>
+</Pressable> */}
+                    </View>
+                </View>
+            </Modal>
                         </View>
                     </BlurView>
                 </View>
@@ -261,6 +355,60 @@ export default function MainDisplay() {
 }
 
 const styles = StyleSheet.create({
+    modalButtons: {
+        flexDirection: 'row',
+        flex: 1,
+        top: '75%'
+        
+    },
+    youButton: {
+        textAlign: 'center',
+        color: 'white',
+        fontSize: 20,
+        padding: 10,
+        top: '10%'
+    },
+    modalLButton: {
+        borderRadius: 10,
+        width: '70%',
+        height: '15%',
+        alignItems: 'center',
+        
+        left: '-25%',
+        textAlign: 'center',
+        backgroundColor: 'rgba(48, 57, 127, 1)'
+    },
+    modalRButton: {
+        borderRadius: 10,
+        width: '70%',
+        height: '15%',
+        alignItems: 'center',
+       
+        right: '15%',
+        textAlign: 'center',
+        backgroundColor: 'rgba(48, 57, 127, 1)'
+    },
+    modalText: {
+        fontSize: 24,
+        color: 'rgba(48, 57, 127, 1)',
+        textAlign: 'center',
+        top: '10%'
+
+    },
+    modalBackground: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent black background
+    },
+    modalContent: {
+        width: '80%',
+        padding: 20,
+        backgroundColor: '#fff',
+        borderRadius: 10,
+        alignItems: 'center',
+        height: '50%',
+    },
     mainContainer: {
         width: '100%',
         flexGrow: 1, // Allow ScrollView to expand based on content

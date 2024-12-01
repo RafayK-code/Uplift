@@ -60,6 +60,7 @@ dependencies = [
  "chrono",
  "dotenv",
  "jsonwebtoken",
+ "rand",
  "reqwest",
  "serde",
  "serde_derive",

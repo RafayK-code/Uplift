@@ -30,12 +30,16 @@ export const useStreaks = () => {
                 method: 'get',
             })
 
+            
+
             const res: StreakResponse = {
                 currentStreak: data.current_streak,
                 lastStreakDate: new Date(data.last_streak_date),
                 longestStreak: data.longest_streak,
                 affirmations: data.affirmations,
             }
+
+            res.affirmations = res.affirmations.filter(str => str !== '');
 
             setStreakResponseData(res);
             console.log(res);

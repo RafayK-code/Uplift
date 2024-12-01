@@ -1,8 +1,10 @@
 use axum::{extract::State, routing::{get, post}, Extension, Json, Router};
 use chrono::{NaiveDateTime, Utc};
+use rand::{seq::SliceRandom, thread_rng};
 use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 use sqlx::{PgPool, Pool, Postgres};
+use tokio::task;
 
 use crate::{db::{database, models::UserStreaks}, error::{UpliftError, UpliftResult}, log_msg, logger::LogLevel};
 
@@ -12,6 +14,8 @@ pub fn routes(pool: Pool<Postgres>) -> Router {
         .route("/get_generated_history", get(get_generated_history))
         .route("/get_user_streak", get(get_user_streak))
         .route("/update_user_streak", post(update_user_streak))
+        .route("/send_user_affirmation", post(send_user_affirmation))
+        .route("/get_all_user_affirmations", get(get_all_user_affirmations))
         .with_state(pool)
 }
 
@@ -156,6 +160,81 @@ pub async fn update_user_streak(
     Ok(body)
 }
 
+pub async fn send_user_affirmation(
+    State(pool): State<PgPool>,
+    Extension(sub): Extension<String>,
+    Json(payload): Json<MailPayload>
+) -> UpliftResult<Json<Value>> {
+    log_msg!("HANDLER", LogLevel::Info, "send_user_affirmation");
+
+    let get_result = database::get_all_other_users(&pool, sub.to_owned()).await;
+    let users = match get_result {
+        Ok(streaks) => streaks,
+        Err(err) => {
+            log_msg!("HANDLER", LogLevel::Error, "failed to get users: {:?}", err);
+            return Err(UpliftError::StreakUpdateFail);
+        }
+    };
+
+    let recipient = task::block_in_place(|| {
+        let mut rng = thread_rng();
+        let chosen_user = users.choose(&mut rng);
+
+        chosen_user.ok_or(UpliftError::AffirmationGetFail)
+    });
+
+    let recipient = match recipient {
+        Ok(user) => user,
+        Err(err) => {
+            log_msg!("HANDLER", LogLevel::Error, "failed to get users: {:?}", err);
+            return Err(UpliftError::StreakUpdateFail);
+        }
+    }.to_owned();
+
+    let insert_result = database::insert_affirmations_mail(&pool, sub, recipient.sub, payload.content, payload.sent_at).await;
+    match insert_result {
+        Ok(_) => (),
+        Err(err) => {
+            log_msg!("HANDLER", LogLevel::Error, "failed to insert new mail: {:?}", err);
+            return Err(UpliftError::StreakUpdateFail);
+        }
+    }
+
+    let body = Json(json!({
+        "result": {
+            "success": true
+        }
+    }));
+
+    Ok(body)
+}
+
+pub async fn get_all_user_affirmations(State(pool): State<PgPool>, Extension(sub): Extension<String>) -> UpliftResult<Json<MailResponse>>{
+    log_msg!("HANDLER", LogLevel::Info, "get_all_user_affirmations");
+
+    let get_result = database::get_all_mail_affirmations(&pool, sub).await;
+    let gen_affirm_db = match get_result {
+        Ok(affirm) => affirm,
+        Err(err) => {
+            log_msg!("HANDLER", LogLevel::Error, "failed to find affirmation data in database: {:?}", err);
+            return Err(UpliftError::AffirmationGetFail);
+        }
+    };
+
+    let gen_items = gen_affirm_db.into_iter()
+        .map(|affirm| MailResponseItem {
+            content: affirm.content,
+            sent_at: affirm.sent_at,
+        })
+        .collect();
+
+    let response = MailResponse {
+        items: gen_items
+    };
+
+    Ok(Json(response))
+}
+
 #[derive(Deserialize)]
 pub struct GeneratedAffirmationPayload {
     pub content: String,
@@ -186,4 +265,21 @@ pub struct GenerateResponse {
 pub struct GenerateResponseItem {
     pub content: String,
     pub created_at: NaiveDateTime,
+}
+
+#[derive(Deserialize)]
+pub struct MailPayload {
+    pub content: String,
+    pub sent_at: NaiveDateTime,
+}
+
+#[derive(Serialize)]
+pub struct MailResponse {
+    pub items: Vec<MailResponseItem>
+}
+
+#[derive(Serialize)]
+pub struct MailResponseItem {
+    pub content: String,
+    pub sent_at: NaiveDateTime,
 }
