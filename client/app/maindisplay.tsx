@@ -197,9 +197,6 @@ export default function MainDisplay() {
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb} />
             </View>
-            <View>
-            <Button onPress={() => logout({ returnTo: "http://localhost:8081/login"})}>Log Out</Button>
-            </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
