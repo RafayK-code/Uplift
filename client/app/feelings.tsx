@@ -145,13 +145,19 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     submitButton: {
-        backgroundColor: '#007BFF',
+        borderRadius: 10,
+        height: '10%',
+        alignItems: 'center',
+
+        textAlign: 'center',
+        backgroundColor: 'rgba(48, 57, 127, 1)',
         padding: 10,
-        borderRadius: 5,
         width: '100%',
     },
     submitText: {
         color: '#fff',
+        fontSize: 20,
+        top: '30%',
         textAlign: 'center',
         fontWeight: 'bold',
     },

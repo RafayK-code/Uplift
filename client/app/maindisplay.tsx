@@ -184,6 +184,13 @@ export default function MainDisplay() {
                 // <DailyOverlay onPress={handleAnswer} />
                 )}
             </View> */}
+            <View style={styles.userView}>
+            <Image
+                    source={require('@/assets/images/logout.svg')}
+                    style={styles.icon}
+                    resizeMode="contain"
+                    />
+            </View>
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb}/>
             </View>
@@ -373,14 +380,15 @@ const styles = StyleSheet.create({
         zIndex: -1, // Push it behind other elements
     },
     icon: {
-        height: 40,
+        height: 45,
+        width: 40
     },
     userView: {
         position: 'absolute',
         top: '3%',
         right: '7%',
         zIndex: 1000,
-        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
         borderRadius: 25,
         padding: 10,
         alignItems: 'center',
@@ -393,7 +401,6 @@ const styles = StyleSheet.create({
         top: '3%',
         left: '7%',
         zIndex: 1000,
-        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
         borderRadius: 25,
         padding: 10,
         alignItems: 'center',

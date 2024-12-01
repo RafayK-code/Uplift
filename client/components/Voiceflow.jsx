@@ -60,6 +60,8 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        
   },
 
   icon: {
