@@ -1,24 +1,90 @@
-import { Image, Text, View, SafeAreaView, StyleSheet } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
-import Tinder from '../components/Tinder';
 
 
 import Messages from '../components/messages';
-import Textbar from '../components/textbar';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
-import React from 'react';
+import { useStreaks } from '@/hooks/useStreaks';
+import { BlurView } from 'expo-blur';
 
 export default function MainDisplay() {
 
     const currentTime = useCurrentTime();
 
+    const [text, setText] = useState<string>('');
+    const [currentStreak, setCurrentStreak] = useState<number>(0);
+
+    const { 
+        getStreakInfo, 
+        uploadStreakInfo, 
+        checkIfSameAffirmation, 
+        streakResponseData, 
+        streaksLoading, 
+        error 
+    } = useStreaks();
+
+    // Handle new affirmation submission
+    const handleNewAffirmation = async (newAffirmation: string) => {
+        if (checkIfSameAffirmation(newAffirmation)) {
+            return false;
+        }
     
+        try {
+            if (streakResponseData == null)
+                return;
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+    
+            var newCurrentStreak = streakResponseData.currentStreak;
+            if (today > streakResponseData.lastStreakDate) {
+                newCurrentStreak++;
+            }
+    
+            var longestStreak = Math.max(newCurrentStreak, streakResponseData.longestStreak)
+    
+            await uploadStreakInfo({
+                currentStreak: newCurrentStreak, // Increment streak
+                longestStreak: longestStreak, // Update longest streak
+                content: newAffirmation,
+            });
+            
+            setCurrentStreak(newCurrentStreak);
+            return true;
+        } catch (err) {
+            console.error('Failed to update streak:', err);
+            return false;
+        }
+    };
+
+    const sendMessage = async () => {
+        // empty message
+        if (text.trim().length === 0) {
+            Alert.alert('Error', 'Empty Message');
+            return;
+        }
+
+        const result = await handleNewAffirmation(text.trim());
+        console.log(result);
+
+        if (result) {
+            setText('');
+        }
+    }
+    
+    useEffect(() => {
+        getStreakInfo()
+    }, [])
+
+    useEffect(() => {
+        setCurrentStreak(streakResponseData?.currentStreak || 0);
+    }, [streakResponseData])
 
     return (
         
@@ -61,7 +127,20 @@ export default function MainDisplay() {
                         <View>
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
-                        <Tinder/>
+
+                        <View style={styles.streakContainer}>
+                            {/* Fire Icon */}
+                            <Image
+                                source={require('@/assets/images/tinder.png')}
+                                style={styles.tinder}
+                                resizeMode="contain"
+                            />
+                            {/* Streak Number */}
+                            <ThemedText style={styles.streakText}>
+                                {currentStreak}
+                            </ThemedText>
+                        </View>
+
                     </View>
                 </LinearGradient>
 
@@ -70,7 +149,27 @@ export default function MainDisplay() {
                 </View>
             </ScrollView>
 
-            <Textbar />
+            <View style={styles.mainContainer}>
+                <View style={styles.borderContainer}>
+                    <BlurView intensity={50} style={styles.blurBox}>
+                        <View style={styles.inputRow}>
+                            <TextInput 
+                                style={styles.inputBox}
+                                placeholder="New affirmation" 
+                                placeholderTextColor="#30397F"
+                                value={text}
+                                onChangeText={setText}
+                            />
+                            <Pressable 
+                            style={styles.sendButton}
+                            onPress ={sendMessage}
+                            >
+                                <Text style={styles.sendText}>→</Text>
+                            </Pressable>
+                        </View>
+                    </BlurView>
+                </View>
+            </View>
         </ThemedView>
     );
 }
@@ -172,6 +271,69 @@ const styles = StyleSheet.create({
     },
     themeView: {
         backgroundColor: 'transparent'
-    }
+    },
 
+    borderContainer: {
+        height: 50,
+        width: '90%',
+        marginVertical: 10,
+        borderRadius: 50,
+        borderColor: Colors.light.text,
+        borderWidth: 1.5,
+        overflow: 'hidden',
+    },
+
+    blurBox: {
+        flex: 1,
+        borderRadius: 50,
+    },
+
+    inputRow: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 8,
+    },
+
+    inputBox: {
+        flex: 1,
+        height: '100%',
+        color: Colors.light.text,
+    },
+
+    sendButton: {
+        marginLeft: 15,
+        backgroundColor: Colors.light.text,
+        borderRadius: 50,
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+    },
+
+    sendText: {
+        color: Colors.light.background,
+        fontWeight: 'bold',
+    },
+
+    streakContainer: {
+        marginTop: 30,
+
+        width: 50,
+        aspectRatio: 1,
+        borderRadius: 50,
+        backgroundColor: Colors.light.background,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    tinder: {
+        height: 20,
+    },
+
+    streakText: {
+        fontFamily: 'monospace',
+        fontWeight: 'bold',
+        fontSize: 12,
+    }
 });
