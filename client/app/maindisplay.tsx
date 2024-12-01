@@ -167,7 +167,7 @@ export default function MainDisplay() {
                 )}
             </View> */}
             <View style={styles.toolsView}>
-            <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} />
+            <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb}/>
             </View>
             <View style={styles.userView}>
             <Pressable onPress={handleUserProfilePress}>
