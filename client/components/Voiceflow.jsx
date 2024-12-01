@@ -46,6 +46,7 @@ const VoiceflowButton = ({ setTimeDisplay, setMessageDisplay, onPressCb }) => {
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
+    // flex: 1,
     // justifyContent: 'center',
     // alignItems: 'center',
     // borderRadius: 10,
@@ -60,6 +61,8 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        
   },
 
   icon: {
