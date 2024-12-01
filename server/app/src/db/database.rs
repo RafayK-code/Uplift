@@ -115,6 +115,7 @@ pub async fn update_user_streak(pool: &Pool<Postgres>, streaks: UserStreaks) -> 
     .bind(streaks.affirmation_1)
     .bind(streaks.affirmation_2)
     .bind(streaks.affirmation_3)
+    .bind(streaks.id)
     .execute(pool)
     .await?;
 
