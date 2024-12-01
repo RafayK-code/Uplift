@@ -1,0 +1,6 @@
+{
+    "domain": "dev-rg785djdlhv8xukf.ca.auth0.com",
+    "clientId": "NW70ZcT6c8jON5LipnwPkQV5Fe8deaxF",
+    "audience": "http://localhost:8080/",
+    "redirect_uri": "http://localhost:8081/maindisplay"
+  }

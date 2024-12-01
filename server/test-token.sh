@@ -1,1 +1,1 @@
-curl -X GET http://localhost:8080/ -H "Authorization: Bearer $1"
+curl -X GET http://localhost:8080/get_user_streaks -H "Authorization: Bearer $1"

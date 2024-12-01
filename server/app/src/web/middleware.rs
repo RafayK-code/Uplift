@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 use std::fs;
 
-use crate::{db::database, error::{UpliftError, UpliftResult}};
+use crate::{db::database, error::{UpliftError, UpliftResult}, log_msg, logger::LogLevel};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
@@ -22,7 +22,7 @@ pub async fn validate_jwt_middleware<B>(State(pool): State<PgPool>, mut req: axu
                 Ok(claims) => {
                     let exists = database::user_exists(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     if !exists {
-                        database::insert_user(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
+                        database::init_user(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     }
                     req.extensions_mut().insert(claims.sub);
                     Ok(next.run(req).await)
@@ -76,5 +76,7 @@ async fn jwt_from_header<B>(req: &axum::http::Request<B>) -> UpliftResult<String
             }
         }
     }
+
+    log_msg!("MIDDLEWARE", LogLevel::Error, "Failed to find auth header");
     Err(UpliftError::AuthFail)
 }

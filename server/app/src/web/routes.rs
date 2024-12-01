@@ -9,6 +9,7 @@ use crate::{db::{database, models::UserStreaks}, error::{UpliftError, UpliftResu
 pub fn routes(pool: Pool<Postgres>) -> Router {
     Router::new()
         .route("/store_generated_affirmation", post(store_generated_affirmation))
+        .route("/get_generated_history", get(get_generated_history))
         .route("/get_user_streak", get(get_user_streak))
         .route("/update_user_streak", post(update_user_streak))
         .with_state(pool)

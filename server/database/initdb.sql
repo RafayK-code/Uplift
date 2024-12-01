@@ -25,7 +25,7 @@ CREATE TABLE affirmations_reactions(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255),
     affirmation INT,
-    reacted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reacted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(sub) ON DELETE CASCADE,
     FOREIGN KEY (affirmation) REFERENCES affirmations_mail(id) ON DELETE CASCADE
 );
@@ -33,9 +33,9 @@ CREATE TABLE affirmations_reactions(
 CREATE TABLE user_streaks(
     id SERIAL PRIMARY KEY,
     user_id VARCHAR(255),
-    current_streak INT DEFAULT 0,
-    last_streak_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    longest_streak INT DEFAULT 0,
+    current_streak INT DEFAULT 0 NOT NULL,
+    last_streak_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    longest_streak INT DEFAULT 0 NOT NULL,
     affirmation_1 TEXT NOT NULL,
     affirmation_2 TEXT NOT NULL,
     affirmation_3 TEXT NOT NULL,
