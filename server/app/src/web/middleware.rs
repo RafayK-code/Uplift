@@ -6,7 +6,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 use std::fs;
 
-use crate::{db::database, error::{UpliftError, UpliftResult}};
+use crate::{db::database, error::{UpliftError, UpliftResult}, log_msg, logger::LogLevel};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Claims {
@@ -76,5 +76,7 @@ async fn jwt_from_header<B>(req: &axum::http::Request<B>) -> UpliftResult<String
             }
         }
     }
+
+    log_msg!("MIDDLEWARE", LogLevel::Error, "Failed to find auth header");
     Err(UpliftError::AuthFail)
 }

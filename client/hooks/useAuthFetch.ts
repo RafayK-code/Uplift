@@ -14,7 +14,7 @@ export const useAuthFetch = () => {
                 url,
                 headers: {
                     ...options.headers,
-                    Authorization: `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`,
                 },
                 data: options.data || {},
             });

@@ -18,11 +18,13 @@ export const useStreaks = () => {
     const { authFetch } = useAuthFetch();
     const [streaksLoading, setStreaksLoading] = useState<boolean>();
     const [streakResponseData, setStreakResponseData] = useState<StreakResponse | null>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const serverUrl = 'http://localhost:8080';
 
     const getStreakInfo = async () => {
         setStreaksLoading(true);
+        setError(null); 
         try {
             const data = await authFetch(`${serverUrl}/get_user_streak`, {
                 method: 'get',
@@ -40,6 +42,7 @@ export const useStreaks = () => {
         }
         catch (error) {
             console.log(error);
+            setError("Failed to fetch streak information.");
         }
         finally {
             setStreaksLoading(false);
@@ -59,27 +62,33 @@ export const useStreaks = () => {
 
     const uploadStreakInfo = async (payload: StreakPayload) => {
         setStreaksLoading(true);
+        setError(null);
         try {
             const data = await authFetch(`${serverUrl}/update_user_streak`, {
-                method: 'post',
+                method: "post",
                 data: {
                     current_streak: payload.currentStreak,
                     longest_streak: payload.longestStreak,
                     content: payload.content,
-                }
-            })
+                },
+            });
 
             const result = data.result.success;
-            if (!result)
-                throw new Error("failed to submit records");
-        }
-        catch(error) {
+            if (!result) throw new Error("Failed to submit records.");
+
+            // Update local state after successful upload
+            setStreakResponseData((prev) => ({
+                ...prev!,
+                currentStreak: payload.currentStreak,
+                longestStreak: payload.longestStreak,
+            }));
+        } catch (error) {
             console.log(error);
-        }
-        finally {
+            setError("Failed to update streak information.");
+        } finally {
             setStreaksLoading(false);
         }
-    }
+    };
 
-    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation, streaksLoading, streakResponseData };
+    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation , streakResponseData, streaksLoading, error};
 }

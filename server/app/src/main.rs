@@ -1,7 +1,8 @@
-use axum::{routing::get, Router};
+use axum::{http::Method, routing::get, Router};
 use db::database;
 use dotenv::dotenv;
 use logger::LogLevel;
+use tower_http::cors::{Any, CorsLayer};
 use web::middleware::validate_jwt_middleware;
 
 async fn handler() -> &'static str {
@@ -30,10 +31,17 @@ async fn main() {
         }
     };
 
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(vec![Method::POST, Method::GET, Method::DELETE])
+        .allow_headers(vec!["Content-Type".parse().unwrap(), "Authorization".parse().unwrap()]);
+
     // Create an Axum router with the JWT validation middleware
     let app = Router::new()
         .route("/", get(handler))
-        .layer(axum::middleware::from_fn_with_state(pool.clone(), validate_jwt_middleware));
+        .merge(web::routes::routes(pool.clone()))
+        .layer(axum::middleware::from_fn_with_state(pool.clone(), validate_jwt_middleware))
+        .layer(cors);
 
     let addr = std::net::SocketAddr::from(([0, 0, 0, 0], 8080));
     log_msg!("MAIN", LogLevel::Info, "Listening on http://{}", addr);
