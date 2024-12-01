@@ -21,7 +21,7 @@ export default function MainDisplay() {
 
     return (
         
-        <ThemedView style={{ flex: 1 }}>
+        <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
             <View style={styles.userView}>
             <Image
@@ -37,6 +37,7 @@ export default function MainDisplay() {
                     style={styles.upliftLogo}
                     resizeMode="contain"
                     />
+                
                 </View>
                 <LinearGradient 
                     colors={['#AFE3FF', '#FFF186', '#FFF']} // Gradient colors
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     timeDisplay: {
         fontFamily: 'monospace',
         fontWeight: 'bold',
-        marginBottom: '20%'
+        marginBottom: '5%'
     },
 
     otherDisplay: {
@@ -126,24 +127,11 @@ const styles = StyleSheet.create({
     upliftLogo: {
         width: 80,
     },
-
-    // backgroundCircle: {
-    //     position: 'absolute',
-    //     width: '140%', // Make the circle larger than the screen
-    //     aspectRatio: 1, // Ensures it stays a perfect circle
-    //     borderRadius: 500, // Rounds the edges fully to make it circular
-    //     marginTop: 95,
-    //     // top: '-5%', // Adjust vertical position (negative pushes it up)
-    //     // left: '-25%', // Center it horizontally
-    //     zIndex: -1, // Push it behind other elements
-    // },
-
     backgroundCircle: {
         position: 'absolute',
         width: '140%', // Make the circle larger than the screen
         aspectRatio: 1, // Ensures it stays a perfect circle
         borderRadius: 500, // Rounds the edges fully to make it circular
-        // marginTop: 95,
         top: '-15%', // Adjust vertical position (negative pushes it up)
         left: '-25%', // Center it horizontally
         zIndex: -1, // Push it behind other elements
@@ -153,8 +141,20 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     userView: {
-        marginLeft: "80%",
-        marginTop: '5%'
+        // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '5%',
+        right: '-2%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    themeView: {
+        backgroundColor: 'transparent'
     }
 
 });
