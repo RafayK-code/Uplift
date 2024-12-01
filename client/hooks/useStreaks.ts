@@ -76,11 +76,15 @@ export const useStreaks = () => {
             const result = data.result.success;
             if (!result) throw new Error("Failed to submit records.");
 
+            var newAffirmations = [ payload.content, ... streakResponseData?.affirmations || []]
+            newAffirmations.pop();
+
             // Update local state after successful upload
             setStreakResponseData((prev) => ({
                 ...prev!,
                 currentStreak: payload.currentStreak,
                 longestStreak: payload.longestStreak,
+                affirmations: newAffirmations,
             }));
         } catch (error) {
             console.log(error);

@@ -6,8 +6,6 @@ import { ThemedText } from '@/components/ThemedText';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-import Messages from '../components/messages';
 import VoiceflowButton from '../components/Voiceflow';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
@@ -130,6 +128,18 @@ export default function MainDisplay() {
       </LinearGradient>
     );
 
+    const renderUserAffirmation = ({ item }: { item: string }) => (
+        <LinearGradient 
+        colors={[Colors.light.yellow, Colors.light.blue]} 
+        locations={[0.2785, 0.9698]} 
+        style={styles.affirmation}
+        start={{ x: 1, y: 0 }} 
+        end={{ x: 0, y: 1 }}   
+    >
+      <ThemedText style={styles.affirmationText}>{item}</ThemedText>
+        </LinearGradient>
+    );
+
     return (
         
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
@@ -206,12 +216,12 @@ export default function MainDisplay() {
                     </View>
                     <View style={styles.section2}>
                     <ThemedText style={styles.subtitle1}>
-                      From Friends
+                      Your Recent Self Affirmations
                     </ThemedText>
                     <ScrollView horizontal={true} style={styles.horizontalScroll}>
                     <FlatList
-                            data={affirmationHistoryResponseData ? affirmationHistoryResponseData.items : []} // Data array for affirmations
-                            renderItem={renderAffirmation} // Render each affirmation
+                            data={streakResponseData ? streakResponseData.affirmations : []} // Data array for affirmations
+                            renderItem={renderUserAffirmation} // Render each affirmation
                             keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
                             horizontal={true} // Enables horizontal scrolling
                             showsHorizontalScrollIndicator={false} // Hides scroll bar
