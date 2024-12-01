@@ -81,5 +81,5 @@ export const useStreaks = () => {
         }
     }
 
-    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation, streaksLoading };
+    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation, streaksLoading, streakResponseData };
 }

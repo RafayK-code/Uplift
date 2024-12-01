@@ -74,4 +74,6 @@ export const useGenAffirmations = () => {
             setAffirmationsLoading(false);
         }
     }
+
+    return { getAffirmationHistory, sendNewAffirmation, affirmationsLoading, affirmationHistoryResponseData }
 }
