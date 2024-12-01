@@ -1,6 +1,6 @@
 use std::{env, error::Error};
 
-use chrono::NaiveDateTime;
+use chrono::{Duration, NaiveDateTime, Utc};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
 use super::models::{GeneratedAffirmation, UserStreaks};
@@ -15,6 +15,32 @@ pub async fn create_pool() -> DbResult<Pool<Postgres>> {
         Ok(pool) => Ok(pool),
         Err(error) => Err(Box::new(error) as DbError)
     }
+}
+
+pub async fn init_user(pool: &Pool<Postgres>, sub: String) -> DbResult<()> {
+    let mut tx = pool.begin().await?;
+
+    sqlx::query(
+        "INSERT INTO users (sub) VALUES ($1)"
+    )
+    .bind(&sub)
+    .execute(&mut *tx)
+    .await?;
+
+    sqlx::query(
+        "INSERT INTO user_streaks (user_id, last_streak_date, affirmation_1, affirmation_2, affirmation_3) VALUES ($1, $2, $3, $4, $5)"
+    )
+    .bind(&sub)
+    .bind(Utc::now() - Duration::hours(24))
+    .bind("")
+    .bind("")
+    .bind("")
+    .execute(&mut *tx)
+    .await?;
+
+    tx.commit().await?;
+
+    Ok(())
 }
 
 pub async fn insert_user(pool: &Pool<Postgres>, sub: String) -> DbResult<()> {
