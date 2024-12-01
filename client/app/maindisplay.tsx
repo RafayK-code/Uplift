@@ -107,11 +107,16 @@ export default function MainDisplay() {
             sentAt: sentAt,
         });
     }
+
+    const startPolling = () => {
+        setInterval(getAffirmationMail, 5000);
+    }
     
     useEffect(() => {
         getStreakInfo();
         getAffirmationHistory();
         getAffirmationMail();
+        startPolling();
     }, [])
 
     useEffect(() => {
@@ -178,9 +183,6 @@ export default function MainDisplay() {
             <SafeAreaView />
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb} />
-            </View>
-            <View>
-            <Button onPress={() => logout({ returnTo: "http://localhost:8081/login"})}>Log Out</Button>
             </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
