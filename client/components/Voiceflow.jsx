@@ -44,14 +44,26 @@ const VoiceflowButton = ({ setTimeDisplay, setMessageDisplay }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    // borderRadius: 10,
+    // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '3%',
+        left: '7%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
   },
 
   icon: {
-    width: 50,
+    width: 40,
+    height: 40
   },
 });
 

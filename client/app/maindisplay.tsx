@@ -8,6 +8,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 
 import Messages from '../components/messages';
+import VoiceflowButton from '../components/Voiceflow';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
@@ -19,6 +20,8 @@ export default function MainDisplay() {
 
     const [text, setText] = useState<string>('');
     const [currentStreak, setCurrentStreak] = useState<number>(0);
+    const [timeDisplay, setTimeDisplay] = useState(currentTime);
+    const [messageDisplay, setMessageDisplay] = useState('Live, Laugh, Love, Serve Slay Survive, Lorem Ipsum');
 
     const { 
         getStreakInfo, 
@@ -91,11 +94,7 @@ export default function MainDisplay() {
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
             <View style={styles.toolsView}>
-            <Image
-                    source={require('@/assets/images/tools.svg')}
-                    style={styles.icon}
-                    resizeMode="contain"
-                    />
+            <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} />
             </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
@@ -125,7 +124,7 @@ export default function MainDisplay() {
                             <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
                         </View>
                         <View>
-                            <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
+                            <ThemedText style={styles.messageDisplay}>{messageDisplay}</ThemedText>
                         </View>
 
                         <View style={styles.streakContainer}>
