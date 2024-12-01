@@ -5,13 +5,14 @@ import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ScrollView } from 'react-native-gesture-handler';
 import { LinearGradient } from 'expo-linear-gradient';
+import Tinder from '../components/Tinder';
 
 
 import Messages from '../components/messages';
 import Textbar from '../components/textbar';
-import Tinder from '../components/Tinder';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
+import React from 'react';
 
 export default function MainDisplay() {
 
@@ -21,8 +22,15 @@ export default function MainDisplay() {
 
     return (
         
-        <ThemedView style={{ flex: 1 }}>
+        <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
+            <View style={styles.toolsView}>
+            <Image
+                    source={require('@/assets/images/tools.svg')}
+                    style={styles.icon}
+                    resizeMode="contain"
+                    />
+            </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
@@ -30,6 +38,7 @@ export default function MainDisplay() {
                     style={styles.upliftLogo}
                     resizeMode="contain"
                     />
+                
                 </View>
                 <LinearGradient 
                     colors={['#AFE3FF', '#FFF186', '#FFF']} // Gradient colors
@@ -52,9 +61,7 @@ export default function MainDisplay() {
                         <View>
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
-
                         <Tinder/>
-
                     </View>
                 </LinearGradient>
 
@@ -74,6 +81,7 @@ const styles = StyleSheet.create({
         flexGrow: 1, // Allow ScrollView to expand based on content
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: 'white'
     },
 
     logoContainer: {
@@ -86,12 +94,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 500,
         backgroundColor: Colors.light.pink,
-        marginBottom: '-40%', 
+        marginBottom: '-35%', 
         zIndex: 1,
     },
 
     messageContainer: {
         width: '60%', 
+        top: '10%',
         aspectRatio: 1,
         justifyContent: 'center',
         alignItems: 'center',
@@ -105,7 +114,7 @@ const styles = StyleSheet.create({
     timeDisplay: {
         fontFamily: 'monospace',
         fontWeight: 'bold',
-        marginBottom: '20%'
+        marginBottom: '5%'
     },
 
     otherDisplay: {
@@ -122,28 +131,47 @@ const styles = StyleSheet.create({
     upliftLogo: {
         width: 80,
     },
-
-    // backgroundCircle: {
-    //     position: 'absolute',
-    //     width: '140%', // Make the circle larger than the screen
-    //     aspectRatio: 1, // Ensures it stays a perfect circle
-    //     borderRadius: 500, // Rounds the edges fully to make it circular
-    //     marginTop: 95,
-    //     // top: '-5%', // Adjust vertical position (negative pushes it up)
-    //     // left: '-25%', // Center it horizontally
-    //     zIndex: -1, // Push it behind other elements
-    // },
-
     backgroundCircle: {
         position: 'absolute',
         width: '140%', // Make the circle larger than the screen
         aspectRatio: 1, // Ensures it stays a perfect circle
         borderRadius: 500, // Rounds the edges fully to make it circular
-        // marginTop: 95,
         top: '-15%', // Adjust vertical position (negative pushes it up)
         left: '-25%', // Center it horizontally
         zIndex: -1, // Push it behind other elements
     },
-
+    icon: {
+        width: 40,
+        height: 40,
+    },
+    userView: {
+        // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '5%',
+        right: '-2%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    toolsView: {
+        // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '3%',
+        left: '7%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    themeView: {
+        backgroundColor: 'transparent'
+    }
 
 });
