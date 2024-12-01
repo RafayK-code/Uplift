@@ -1,0 +1,1 @@
+../../../../build/generated/ios/RNAuth0SpecJSI.h
