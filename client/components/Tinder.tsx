@@ -56,27 +56,20 @@ export default function Tinder() {
     }
 
     return (
-        <View style={ styles.streakContainer }>
+        <View style={styles.streakContainer}>
+            {/* Fire Icon */}
             <Image
                 source={require('@/assets/images/tinder.png')}
                 style={styles.tinder}
                 resizeMode="contain"
             />
+            {/* Streak Number */}
             <ThemedText style={styles.streakText}>
-                Current Streak: {streakResponseData?.currentStreak || 0}
+                {streakResponseData?.currentStreak || 0}
             </ThemedText>
-            <ThemedText style={styles.streakText}>
-                Longest Streak: {streakResponseData?.longestStreak || 0}
-            </ThemedText>
-            <Text
-                style={{ color: 'blue', marginTop: 10 }}
-                onPress={() => handleNewAffirmation('Keep going!')}
-            >
-                Add Affirmation
-            </Text>
         </View>
     );
-}
+    }
 
 
 const styles = StyleSheet.create({
