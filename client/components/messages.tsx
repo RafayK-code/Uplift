@@ -45,7 +45,7 @@ const renderEmptyAffirmationBox = () => (
     start={{ x: 1, y: 0 }}
     end={{ x: 0, y: 1 }}
   >
-    <ThemedText style={styles.affirmationText}>No affirmations yet</ThemedText>
+    <ThemedText style={styles.affirmationText}>So many affirmations to come</ThemedText>
   </LinearGradient>
 );
 if (affirmationsLoading) {
