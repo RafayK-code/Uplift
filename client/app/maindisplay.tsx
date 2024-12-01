@@ -286,6 +286,7 @@ export default function MainDisplay() {
           
                     </View>
                 </View>
+                <DailyOverlay/>
             </ScrollView>
 
             <View style={styles.mainContainer}>
@@ -365,7 +366,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'center', 
         alignItems: 'center',
-        marginTop: -15,
+        marginTop: 200,
         position: 'relative', 
         zIndex: 10,
         marginBottom: 65
