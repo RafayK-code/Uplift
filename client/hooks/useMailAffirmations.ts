@@ -66,11 +66,6 @@ export const useMailAffirmations = () => {
             const result = data.result.success;
             if (!result)
                 throw new Error("failed to submit records"); 
-
-            setAffirmationMailResponseData((prev) => ({
-                ...prev!,
-                items: [ { content: payload.content, sentAt: payload.sentAt }, ...(prev?.items || []) ]
-            }));
         }
         catch (error) {
             console.log(error)

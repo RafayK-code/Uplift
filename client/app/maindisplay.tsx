@@ -106,18 +106,23 @@ export default function MainDisplay() {
         }
     }
 
-    const onPressCb1 = async (message: string, createdAt: Date) => {
-        setIsModalVisible(false);
+    const onPressCb = async (message: string, createdAt: Date) => {
         await sendNewAffirmation({
             content: message,
             createdAt: createdAt,
         }); 
     }
-    const onPressCb = async (message: string, createdAt: Date) => {
+
+    const onPressSelfCb = async () => {
         setIsModalVisible(false);
-        await sendNewAffirmation({
-            content: message,
-            createdAt: createdAt,
+        await handleNewAffirmation(text);
+    }
+
+    const onPressMailCb = async () => {
+        setIsModalVisible(false);
+        await sendNewMailAffirmation({
+            content: text,
+            sentAt: new Date(),
         }); 
     }
     
@@ -327,11 +332,11 @@ export default function MainDisplay() {
                         <ThemedText style={styles.modalText}>Who would you like to send this to?</ThemedText>
                         {/* <Button style={styles.modalRButton} title="To Yourself" onPress={hideModal} color= 'rgba(48, 57, 127, 1)'/> */}
                             <View style={styles.modalButtons}>
-                            <Pressable onPress={onPressCb}} style={styles.modalLButton}>
+                            <Pressable onPress={onPressSelfCb} style={styles.modalLButton}>
 
                                 <ThemedText style={styles.youButton}>To You</ThemedText>
                             </Pressable>
-                            <Pressable onPress={sendMessage} style={styles.modalRButton}>
+                            <Pressable onPress={onPressMailCb} style={styles.modalRButton}>
 
                             <ThemedText style={styles.youButton}>To a Friend</ThemedText>
                             </Pressable>
