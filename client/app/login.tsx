@@ -10,7 +10,7 @@ import { useRouter } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { navigate } from 'expo-router/build/global-state/routing';
 
-export default function HomeScreen() {
+export default function Login() {
   const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [token, setToken] = useState('');
   const router = useRouter();
@@ -21,7 +21,7 @@ export default function HomeScreen() {
       // Manually wait for authentication status to update.
       setTimeout(async () => {
       if (isAuthenticated) {
-        router.push('/(tabs)/maindisplay');
+        router.push('/maindisplay');
         }
       }, 30); // Adjust delay if needed.
     return;
@@ -32,7 +32,7 @@ export default function HomeScreen() {
       const token = await getAccessTokenSilently();
       setToken(token);
       console.log('Access Token:', token);
-      router.push('/(tabs)/maindisplay');
+      router.push('/maindisplay');
     } catch (error) {
       console.error('Error during login:');
     }
