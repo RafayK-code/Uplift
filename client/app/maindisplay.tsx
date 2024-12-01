@@ -195,11 +195,14 @@ export default function MainDisplay() {
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
             <View style={styles.userView}>
-            <Image
+                <Pressable onPress={() => logout({ returnTo: "http://localhost:8081/login"})}>
+                    <Image
                     source={require('@/assets/images/logout.svg')}
                     style={styles.icon}
                     resizeMode="contain"
                     />
+                    </Pressable>
+
             </View>
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb} />
