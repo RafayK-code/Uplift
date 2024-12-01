@@ -11,6 +11,7 @@ import Messages from './messages';
 import Textbar from './textbar';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
+import React from 'react';
 
 export default function MainDisplay() {
 
