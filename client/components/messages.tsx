@@ -6,6 +6,7 @@ import { Colors } from '@/constants/Colors';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useState, useEffect } from 'react';
 import { useGenAffirmations, AffirmationHistoryItem } from '../hooks/useGenAffirmations';
+import LoadingScreen from './Loading';
 
 // voiceflow
 import React from 'react';
@@ -50,7 +51,8 @@ const renderEmptyAffirmationBox = () => (
 );
 if (affirmationsLoading) {
   return (
-    <ThemedText>Loading...</ThemedText> //replace later with loading page!!!
+    <ThemedText >So many affirmations to come</ThemedText>
+    // <LoadingScreen/> //replace later with loading page!!!
   );
 }
 
