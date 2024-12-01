@@ -14,7 +14,7 @@ export default function Tinder() {
                 style={styles.tinder}
                 resizeMode="contain"
             />
-            <ThemedText style={{fontFamily: 'monospace', fontWeight: 'bold'}}>{streak}</ThemedText>
+            <ThemedText style={styles.streakText}>{streak}</ThemedText>
         </View>
     );
 }
@@ -22,8 +22,9 @@ export default function Tinder() {
 
 const styles = StyleSheet.create({
     streakContainer: {
-        marginTop: 50,
-        width: 80,
+        marginTop: 30,
+
+        width: 50,
         aspectRatio: 1,
         borderRadius: 50,
         backgroundColor: Colors.light.background,
@@ -33,6 +34,12 @@ const styles = StyleSheet.create({
     },
 
     tinder: {
-        height: 40,
+        height: 20,
     },
+
+    streakText: {
+        fontFamily: 'monospace',
+        fontWeight: 'bold',
+        fontSize: 12,
+    }
 });

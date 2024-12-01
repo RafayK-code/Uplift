@@ -47,16 +47,16 @@ export default function MainDisplay() {
                     start={{ x: 0, y: 0 }} // Start at the top
                     end={{ x: 0, y: 1 }}   // End at the bottom
                 >
-                    <View style={styles.messageContainer}>
-                        <View>
-                            <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
-                        </View>
-                        <View>
-                            <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
-                        </View>
+                <View style={styles.messageContainer}>
+                    <View>
+                        <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
+                    </View>
+                    <View>
+                        <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
+                    </View>
 
-                        <Tinder/>
-                        
+                    <Tinder/>
+
                     </View>
                 </LinearGradient>
 
@@ -95,8 +95,8 @@ const styles = StyleSheet.create({
     messageContainer: {
         width: '60%', 
         aspectRatio: 1,
-        justifyContent: 'center',
         alignItems: 'center',
+        padding: 30,
     },
 
     messageDisplay: {
@@ -118,11 +118,11 @@ const styles = StyleSheet.create({
         marginTop: -15,
         position: 'relative', 
         zIndex: 10,
-        marginBottom: 65
+        marginBottom: 60
     },
 
     upliftLogo: {
-        width: 60,
+        width: 50,
     },
 
     backgroundCircle: {

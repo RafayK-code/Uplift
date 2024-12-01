@@ -74,7 +74,6 @@ const renderAffirmation = ({ item }) => (
 const styles = StyleSheet.create({
 
     mainContainer: {
-      marginLeft: '10%',
       width: '100%',
       flex: 1,
       flexDirection: 'column',
@@ -109,13 +108,15 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // Opacity of the shadow
         shadowRadius: 3, // Blur radius
       // marginTop: 150
+
+      marginLeft: 15,
       
     },
     subtitle1: {
       flexDirection: 'column',
       marginBottom: 10,
-      color: 'black',
-      marginLeft: 15
+      color: Colors.light.text,
+      marginLeft: 20,
     },
     section1: {
       flexDirection: 'column'
@@ -128,7 +129,6 @@ const styles = StyleSheet.create({
 
     toGallery: {
       color: Colors.dark.text,
-      marginLeft: 15,
       alignItems: 'center',
       flex: 1
     },
