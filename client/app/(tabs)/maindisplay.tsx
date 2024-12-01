@@ -9,10 +9,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from '../../components/messages';
 import Textbar from '../../components/textbar';
-import VoiceflowComponent from './voiceflow';
-import Tinder from '../../components/Tinder'
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
+import React from 'react';
 
 export default function MainDisplay() {
 
@@ -22,8 +21,15 @@ export default function MainDisplay() {
 
     return (
         
-        <ThemedView style={{ flex: 1 }}>
+        <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
+            <View style={styles.userView}>
+            <Image
+                    source={require('@/assets/images/user-profile.svg')}
+                    style={styles.user}
+                    resizeMode="contain"
+                    />
+            </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
@@ -31,6 +37,7 @@ export default function MainDisplay() {
                     style={styles.upliftLogo}
                     resizeMode="contain"
                     />
+                
                 </View>
                 <LinearGradient 
                     colors={['#AFE3FF', '#FFF186', '#FFF']} // Gradient colors
@@ -39,7 +46,6 @@ export default function MainDisplay() {
                     end={{ x: 0, y: 1 }}   // End at the bottom
                     style={styles.backgroundCircle} // Style for the gradient container
                 />
-                
                 <LinearGradient 
                     colors={['#FF87AD', '#C7CBFF', '#FFF']} // Gradient colors
                     locations={[0, 0.4203, 0.8757]} // Gradient positions
@@ -47,16 +53,13 @@ export default function MainDisplay() {
                     start={{ x: 0, y: 0 }} // Start at the top
                     end={{ x: 0, y: 1 }}   // End at the bottom
                 >
-                <View style={styles.messageContainer}>
-                    <View>
-                        <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
-                    </View>
-                    <View>
-                        <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
-                    </View>
-
-                    <Tinder/>
-
+                    <View style={styles.messageContainer}>
+                        <View>
+                            <ThemedText style={styles.timeDisplay}>{currentTime}</ThemedText>
+                        </View>
+                        <View>
+                            <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
+                        </View>
                     </View>
                 </LinearGradient>
 
@@ -76,6 +79,7 @@ const styles = StyleSheet.create({
         flexGrow: 1, // Allow ScrollView to expand based on content
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: 'white'
     },
 
     logoContainer: {
@@ -95,19 +99,19 @@ const styles = StyleSheet.create({
     messageContainer: {
         width: '60%', 
         aspectRatio: 1,
+        justifyContent: 'center',
         alignItems: 'center',
-        padding: 30,
     },
 
     messageDisplay: {
-        fontSize: 20,
+        fontSize: 25,
         textAlign: 'center',
     },
 
     timeDisplay: {
         fontFamily: 'monospace',
         fontWeight: 'bold',
-        marginBottom: '20%'
+        marginBottom: '5%'
     },
 
     otherDisplay: {
@@ -118,23 +122,40 @@ const styles = StyleSheet.create({
         marginTop: -15,
         position: 'relative', 
         zIndex: 10,
-        marginBottom: 60
+        marginBottom: 65
     },
 
     upliftLogo: {
-        width: 50,
+        width: 80,
     },
-
     backgroundCircle: {
         position: 'absolute',
         width: '140%', // Make the circle larger than the screen
         aspectRatio: 1, // Ensures it stays a perfect circle
         borderRadius: 500, // Rounds the edges fully to make it circular
-        // marginTop: 95,
         top: '-15%', // Adjust vertical position (negative pushes it up)
         left: '-25%', // Center it horizontally
         zIndex: -1, // Push it behind other elements
     },
-
+    user: {
+        width: 50,
+        marginBottom: 10
+    },
+    userView: {
+        // marginLeft: "80%",
+        // marginTop: '5%',
+        position: 'absolute',
+        top: '5%',
+        right: '-2%',
+        zIndex: 1000,
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        borderRadius: 25,
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    themeView: {
+        backgroundColor: 'transparent'
+    }
 
 });
