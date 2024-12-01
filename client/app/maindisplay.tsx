@@ -99,7 +99,6 @@ export default function MainDisplay() {
     }, [])
 
     useEffect(() => {
-        console.log("jejej")
         setCurrentStreak(streakResponseData?.currentStreak || 0);
     }, [streakResponseData])
 
