@@ -3,6 +3,7 @@ import { getConfig } from "./config";
 import MainDisplay from "./maindisplay";
 import Login from "./login";
 import Expo from "expo";
+import LoadingScreen from "@/components/Loading";
 
 const onRedirectCallback = (appState: any) => {};
 const config = getConfig();
@@ -30,7 +31,7 @@ function AuthContent() {
     const { isAuthenticated, isLoading } = useAuth0();
   
     if (isLoading) {
-      return <div>Loading...</div>; // show a loading message or spinner while checking auth status
+      return <LoadingScreen />; // show a loading message or spinner while checking auth status
     }
   
     return isAuthenticated ? <MainDisplay /> : <Login />;
