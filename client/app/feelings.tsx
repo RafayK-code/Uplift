@@ -17,56 +17,88 @@ interface DailyOverlayProps {
 }
 
 function DailyOverlay({ onSubmit }: DailyOverlayProps): JSX.Element {
-    const [text, setText] = useState<string>('');
+    const [userInput, setUserInput] = useState<string>('');
 
     const handleSubmit = () => {
-        if (text.trim().length === 0) {
+        if (userInput.trim().length === 0) {
             Alert.alert('Error', 'Please enter a valid input');
             return;
         }
+        // Handle the submitted input as needed
+        console.log("User Input Submitted:", userInput);
         onSubmit(true); // Notify the parent that submission is complete
+        setUserInput(''); // Reset the input field
     };
+// interface DailyOverlayProps {
+//     onSubmit: (submitted: boolean) => void;
+// }
 
-    const [texty, setTexty] = useState('');
+// function DailyOverlay({ onSubmit }: DailyOverlayProps): JSX.Element {
+//     const [text, setText] = useState<string>('');
 
-    const sendMessage = () => {
-        // empty message
-        if (text.trim().length === 0) {
-            Alert.alert('Error', 'Empty Message');
-            return;
-        }
+//     const handleSubmit = () => {
+//         if (text.trim().length === 0) {
+//             Alert.alert('Error', 'Please enter a valid input');
+//             return;
+//         }
+//         onSubmit(true); // Notify the parent that submission is complete
+//     };
 
-        const timestamp = new Date();
-        setText('');
+//     const [texty, setTexty] = useState('');
 
-    }   
+//     const sendMessage = () => {
+//         // empty message
+//         if (text.trim().length === 0) {
+//             Alert.alert('Error', 'Empty Message');
+//             return;
+//         }
+
+//         const timestamp = new Date();
+//         setText('');
+
+//     }   
 
     return (
         <View style={styles.container}>
-            <View style={styles.midContainer}>
-                <ThemedText style={styles.title}>How are you feeling today?</ThemedText>
+            <View style={styles.contentContainer}>
+                <Text style={styles.title}>How are you feeling today?</Text>
+                <TextInput
+                    style={styles.inputBox}
+                    placeholder="Type what comes to mind :)"
+                    placeholderTextColor="gray"
+                    value={userInput}
+                    onChangeText={setUserInput}
+                />
+                <Pressable style={styles.submitButton} onPress={handleSubmit}>
+                    <Text style={styles.submitText}>Submit</Text>
+                </Pressable>
             </View>
-            <View style={styles.mainContainer}>
-            <View style={styles.borderContainer}>
-                    <View style={styles.inputRow}>
-                        <TextInput 
-                            style={styles.inputBox}
-                            placeholder="Type what comes to mind :)" 
-                            placeholderTextColor="gray"
-                            value={texty}
-                            onChangeText={setTexty}
-                        />
+        </View>
+        // <View style={styles.container}>
+        //     <View style={styles.midContainer}>
+        //         <ThemedText style={styles.title}>How are you feeling today?</ThemedText>
+        //     </View>
+        //     <View style={styles.mainContainer}>
+        //     <View style={styles.borderContainer}>
+        //             <View style={styles.inputRow}>
+        //                 <TextInput 
+        //                     style={styles.inputBox}
+        //                     placeholder="Type what comes to mind :)" 
+        //                     placeholderTextColor="gray"
+        //                     value={texty}
+        //                     onChangeText={setTexty}
+        //                 />
                         
-                    </View>
-            </View>
-        </View>
-        <Pressable 
-                        style={styles.sendButton}
-                        onPress ={sendMessage}
-                        >
-                            <Text style={styles.sendText}>Submit</Text>
-                        </Pressable>
-        </View>
+        //             </View>
+        //     </View>
+        // </View>
+        // <Pressable 
+        //                 style={styles.sendButton}
+        //                 onPress ={sendMessage}
+        //                 >
+        //                     <Text style={styles.sendText}>Submit</Text>
+        //                 </Pressable>
+        // </View>
         // <Modal transparent={true} animationType="slide" visible={true}>
         //     <View style={styles.overlayContainer}>
         //         <View style={styles.overlayContent}>
@@ -149,7 +181,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
         zIndex: 9999, // Ensure it's above other elements
       },
-    midContainer: {
+    contentContainer: {
         position: 'absolute',
         backgroundColor: 'white',
         borderRadius: 20,
