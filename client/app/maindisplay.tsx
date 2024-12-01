@@ -1,4 +1,4 @@
-import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, Button } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, Button, FlatList } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
@@ -7,14 +7,13 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 // import { AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 
-
-import Messages from '../components/messages';
 import VoiceflowButton from '../components/Voiceflow';
 import DailyOverlay from '../components/feelings';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
 import { BlurView } from 'expo-blur';
+import { AffirmationHistoryItem, useGenAffirmations } from '@/hooks/useGenAffirmations';
 
 export default function MainDisplay() {
 
@@ -38,6 +37,12 @@ export default function MainDisplay() {
     const handleUserProfilePress = () => {
         setShowOverlay(!showOverlay); // Toggle the overlay visibility
     };
+
+    const {
+        getAffirmationHistory,
+        sendNewAffirmation,
+        affirmationHistoryResponseData,
+    } = useGenAffirmations();
 
     // Handle new affirmation submission
     const handleNewAffirmation = async (newAffirmation: string) => {
@@ -86,26 +91,61 @@ export default function MainDisplay() {
         if (result) {
             setText('');
         }
-    };
+    }
 
-    const handleAnswer = () => {
-        setHasAnswered(true);
-        localStorage.setItem('hasAnsweredToday', 'true');
-      };
+    const onPressCb = async (message: string, createdAt: Date) => {
+        await sendNewAffirmation({
+            content: message,
+            createdAt: createdAt,
+        }); 
+    }
     
     useEffect(() => {
-        getStreakInfo()
+        getStreakInfo();
+        getAffirmationHistory();
     }, [])
 
     useEffect(() => {
         setCurrentStreak(streakResponseData?.currentStreak || 0);
     }, [streakResponseData])
-    useEffect(() => {
-        const answeredStatus = localStorage.getItem('hasAnsweredToday');
-        if (answeredStatus === 'true') {
-          setHasAnswered(true);
-        }
-      }, []);
+
+    const renderAffirmation = ({ item }: { item: AffirmationHistoryItem }) => (
+        <LinearGradient 
+        colors={[Colors.light.yellow, Colors.light.blue]} 
+        locations={[0.2785, 0.9698]} 
+        style={styles.affirmation}
+        start={{ x: 1, y: 0 }} 
+        end={{ x: 0, y: 1 }}   
+    >
+      <View style={styles.affirmationDetails}>
+      <ThemedText style={styles.affirmationText}>{item.content}</ThemedText>
+      <ThemedText style={styles.affirmationDate}>{item.createdAt.toLocaleDateString()}</ThemedText>
+      </View>
+        </LinearGradient>
+    );
+    const renderEmptyAffirmationBox = () => (
+      <LinearGradient 
+        colors={['white', 'white']} // A simple gray box for empty affirmation
+        locations={[0, 1]} 
+        style={styles.emptyAffirmation}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 1 }}
+      >
+        <ThemedText style={styles.affirmationText}>So many affirmations to come</ThemedText>
+      </LinearGradient>
+    );
+
+    const renderUserAffirmation = ({ item }: { item: string }) => (
+        <LinearGradient 
+        colors={[Colors.light.yellow, Colors.light.blue]} 
+        locations={[0.2785, 0.9698]} 
+        style={styles.affirmation}
+        start={{ x: 1, y: 0 }} 
+        end={{ x: 0, y: 1 }}   
+    >
+      <ThemedText style={styles.affirmationText}>{item}</ThemedText>
+        </LinearGradient>
+    );
 
     return (
         
@@ -187,7 +227,43 @@ export default function MainDisplay() {
                 </LinearGradient>
 
                 <View style={styles.otherDisplay}>
-                    <Messages/>
+                <View style={styles.mainContainerMsg}>
+                    <View style={styles.spacer}/>
+                    <View style={styles.section1}>
+                    <ThemedText style={styles.subtitle1}>
+                      From Us
+                    </ThemedText>
+                    <ScrollView horizontal={true} style={styles.horizontalScroll}>
+                    <FlatList
+                            data={affirmationHistoryResponseData ? affirmationHistoryResponseData.items : []} // Data array for affirmations
+                            renderItem={renderAffirmation} // Render each affirmation
+                            keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
+                            horizontal={true} // Enables horizontal scrolling
+                            showsHorizontalScrollIndicator={false} // Hides scroll bar
+                            contentContainerStyle={styles.affirmationsList}
+                            ListEmptyComponent={renderEmptyAffirmationBox}
+                        />
+                      {/* <ThemedText style={styles.toGallery}>See All</ThemedText> */}
+                    </ScrollView>
+                    </View>
+                    <View style={styles.section2}>
+                    <ThemedText style={styles.subtitle1}>
+                      Your Recent Self Affirmations
+                    </ThemedText>
+                    <ScrollView horizontal={true} style={styles.horizontalScroll}>
+                    <FlatList
+                            data={streakResponseData ? streakResponseData.affirmations : []} // Data array for affirmations
+                            renderItem={renderUserAffirmation} // Render each affirmation
+                            keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
+                            horizontal={true} // Enables horizontal scrolling
+                            showsHorizontalScrollIndicator={false} // Hides scroll bar
+                            contentContainerStyle={styles.affirmationsList}
+                            ListEmptyComponent={renderEmptyAffirmationBox}
+                        />
+                    </ScrollView>
+                    </View>
+          
+                    </View>
                 </View>
             </ScrollView>
 
@@ -380,5 +456,104 @@ const styles = StyleSheet.create({
         fontFamily: 'monospace',
         fontWeight: 'bold',
         fontSize: 12,
+    },
+
+    mainContainerMsg: {
+        width: '100%',
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        color: '#FFFFFF',
+      },
+  
+      spacer: {
+        flex: 1
+      },
+  
+      horizontalScroll: {
+        width: '100%',
+        height: '25%',
+        flexDirection: 'row',
+        marginBottom: 5,
+      },
+      affirmation: {
+        width: '70vw',
+        aspectRatio: 2,
+        flexDirection: 'row',
+        backgroundColor: '#000000', // Background color
+        marginBottom: 5,
+        borderRadius: 10, // Optional: rounded corners
+        marginRight: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: 'rgba(0, 0, 0, 0.10)', // Shadow color
+          shadowOffset: { width: 4, height: 4 }, // Shadow offset (like x and y)
+          shadowOpacity: 1, // Opacity of the shadow
+          shadowRadius: 3, // Blur radius
+  
+        marginLeft: 15,
+        
+      },
+      emptyAffirmation: {
+        width: '91vw',
+        aspectRatio: 2,
+        flexDirection: 'row',
+        backgroundColor: '#000000', // Background color
+        marginBottom: 5,
+        borderRadius: 10, // Optional: rounded corners
+        marginRight: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: 'rgba(0, 0, 0, 0.10)', // Shadow color
+          shadowOffset: { width: 4, height: 4 }, // Shadow offset (like x and y)
+          shadowOpacity: 1, // Opacity of the shadow
+          shadowRadius: 3, // Blur radius
+  
+        marginLeft: 15,
+        
+      },
+      subtitle1: {
+        flexDirection: 'column',
+        marginBottom: 10,
+        color: Colors.light.text,
+        marginLeft: 20,
+      },
+      section1: {
+        flexDirection: 'column'
+      },
+  
+      section2: {
+        marginTop: 15,
+        flexDirection: 'column'
+      },
+  
+      toGallery: {
+        color: Colors.dark.text,
+        alignItems: 'center',
+        flex: 1
+      },
+      affirmationText: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        fontSize: 14,
+        lineHeight: 15,
+        textAlign: 'center'
+    },
+    affirmationDate: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      fontSize: 10,
+      lineHeight: 15,
+      marginTop: 5,
+      textAlign: 'center'
+    },
+    affirmationDetails: {
+      width: '100%',
+      flexGrow: 1, // Allow ScrollView to expand based on content
+      flexDirection: 'column',
+      alignItems: 'center',
+    },
+    affirmationsList: {
+      marginLeft: 1
     }
 });

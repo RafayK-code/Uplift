@@ -4,7 +4,7 @@ import { interact } from '@/hooks/useVoiceflow';
 import { Colors } from '@/constants/Colors';
 import { ThemedText } from '@/components/ThemedText';
 
-const VoiceflowButton = ({ setTimeDisplay, setMessageDisplay }) => {
+const VoiceflowButton = ({ setTimeDisplay, setMessageDisplay, onPressCb }) => {
   const handleInteract = async () => {
     const user_id = 'jennifer.cao.ca@gmail.com';
     const request = { type: 'launch' };
@@ -23,6 +23,7 @@ const VoiceflowButton = ({ setTimeDisplay, setMessageDisplay }) => {
       if (textResponse) {
         setTimeDisplay(new Date().toLocaleTimeString()); // Update time display
         setMessageDisplay(textResponse); // Update message display
+        onPressCb(textResponse, new Date());
       }
     } catch (err) {
       console.error(err.message || 'Unknown error');
