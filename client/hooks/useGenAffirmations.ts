@@ -69,7 +69,7 @@ export const useGenAffirmations = () => {
 
             setAffirmationHistoryResponseData((prev) => ({
                 ...prev!,
-                items: [...(prev?.items || []), { content: payload.content, createdAt: payload.createdAt }]
+                items: [ { content: payload.content, createdAt: payload.createdAt }, ...(prev?.items || []) ]
             }));
         }
         catch (error) {
