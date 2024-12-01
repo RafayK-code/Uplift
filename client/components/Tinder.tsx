@@ -6,35 +6,21 @@ import { useStreaks } from '../hooks/useStreaks';
 import { Colors } from '@/constants/Colors';
 
 export default function Tinder() {
+    const { 
+        getStreakInfo, 
+        uploadStreakInfo, 
+        checkIfSameAffirmation, 
+        streakResponseData, 
+        streaksLoading, 
+        error 
+    } = useStreaks();
 
-    const { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation } = useStreaks();
-
-    const [streak, setStreak] = useState<number>(0); // Current streak
-    const [longestStreak, setLongestStreak] = useState<number>(0);
-    const [loading, setLoading] = useState<boolean>(false); 
-    const [error, setError] = useState<string | null>(null);
-
-    // Fetch streak data and update components state
+    // Fetch streak data when the component mounts
     useEffect(() => {
-        const fetchStreakData = async () => {
-            setLoading(true);
-            setError(null);
-            try {
-                const data = await getStreakInfo();
-                setStreak(data.currentStreak || 0);
-                setLongestStreak(data.longestStreak || 0);
-            } catch (err) {
-                console.error(err);
-                setError('Failed to fetch streak information.');
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchStreakData();
+        getStreakInfo(); // Fetch data and update the hook's state
     }, []);
 
-    // Validate new affirmation
+    // Handle new affirmation submission
     const handleNewAffirmation = async (newAffirmation: string) => {
         if (checkIfSameAffirmation(newAffirmation)) {
             console.log('Affirmation is the same. Streak will not increase.');
@@ -42,23 +28,18 @@ export default function Tinder() {
         }
 
         try {
-            setLoading(true);
             await uploadStreakInfo({
-                currentStreak: streak + 1, // Streak increases by 1
-                longestStreak: Math.max(streak + 1, longestStreak), // Update to the higher of the current or previous longest streak
+                currentStreak: (streakResponseData?.currentStreak || 0) + 1, // Increment streak
+                longestStreak: Math.max((streakResponseData?.currentStreak || 0) + 1, streakResponseData?.longestStreak || 0), // Update longest streak
                 content: newAffirmation,
             });
-            setStreak(streak + 1);
-            setLongestStreak(Math.max(streak + 1, longestStreak));
             console.log('Streak updated successfully!');
         } catch (err) {
             console.error('Failed to update streak:', err);
-        } finally {
-            setLoading(false);
         }
     };
 
-    if (loading) {
+    if (streaksLoading) {
         return (
             <View style={styles.streakContainer}>
                 <ActivityIndicator size="large" />
@@ -81,7 +62,18 @@ export default function Tinder() {
                 style={styles.tinder}
                 resizeMode="contain"
             />
-            <ThemedText style={styles.streakText}>{streak}</ThemedText>
+            <ThemedText style={styles.streakText}>
+                Current Streak: {streakResponseData?.currentStreak || 0}
+            </ThemedText>
+            <ThemedText style={styles.streakText}>
+                Longest Streak: {streakResponseData?.longestStreak || 0}
+            </ThemedText>
+            <Text
+                style={{ color: 'blue', marginTop: 10 }}
+                onPress={() => handleNewAffirmation('Keep going!')}
+            >
+                Add Affirmation
+            </Text>
         </View>
     );
 }
