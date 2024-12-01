@@ -59,13 +59,18 @@ export const useGenAffirmations = () => {
                 method: 'post',
                 data: {
                     content: payload.content,
-                    created_at: payload.createdAt.toUTCString(),
+                    created_at: payload.createdAt.toISOString().split(".")[0],
                 }
             })
 
             const result = data.result.success;
             if (!result)
                 throw new Error("failed to submit records"); 
+
+            setAffirmationHistoryResponseData((prev) => ({
+                ...prev!,
+                items: [...(prev?.items || []), { content: payload.content, createdAt: payload.createdAt }]
+            }));
         }
         catch (error) {
             console.log(error)
