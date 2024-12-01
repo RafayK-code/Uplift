@@ -100,6 +100,13 @@ export default function MainDisplay() {
             createdAt: createdAt,
         }); 
     }
+
+    const onMailPressCb = async (message: string, sentAt: Date) => {
+        await sendNewMailAffirmation({
+            content: message,
+            sentAt: sentAt,
+        });
+    }
     
     useEffect(() => {
         getStreakInfo();
