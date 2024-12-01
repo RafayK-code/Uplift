@@ -22,7 +22,7 @@ pub async fn validate_jwt_middleware<B>(State(pool): State<PgPool>, mut req: axu
                 Ok(claims) => {
                     let exists = database::user_exists(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     if !exists {
-                        database::insert_user(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
+                        database::init_user(&pool, claims.sub.to_owned()).await.map_err(|_| UpliftError::AuthFail)?;
                     }
                     req.extensions_mut().insert(claims.sub);
                     Ok(next.run(req).await)
