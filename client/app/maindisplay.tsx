@@ -9,6 +9,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 
 import Messages from '../components/messages';
 import Textbar from '../components/textbar';
+import Tinder from '../components/Tinder';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 
@@ -51,6 +52,9 @@ export default function MainDisplay() {
                         <View>
                             <ThemedText style={styles.messageDisplay}>Live, Laugh, Love, Serve Slay Survive, Lorum Ipsum</ThemedText>
                         </View>
+
+                        <Tinder/>
+
                     </View>
                 </LinearGradient>
 
