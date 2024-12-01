@@ -3,7 +3,7 @@ use std::{env, error::Error};
 use chrono::{Duration, NaiveDateTime, Utc};
 use sqlx::{postgres::PgPoolOptions, Pool, Postgres};
 
-use super::models::{GeneratedAffirmation, UserStreaks};
+use super::models::{GeneratedAffirmation, MailedAffirmation, User, UserStreaks};
 
 pub type DbError = Box<dyn Error + Send + Sync>;
 pub type DbResult<T> = Result<T, DbError>;
@@ -41,6 +41,17 @@ pub async fn init_user(pool: &Pool<Postgres>, sub: String) -> DbResult<()> {
     tx.commit().await?;
 
     Ok(())
+}
+
+pub async fn get_all_other_users(pool: &Pool<Postgres>, sub: String) -> DbResult<Vec<User>> {
+    let rows = sqlx::query_as::<_, User>(
+        "SELECT * FROM users WHERE sub != $1"
+    )
+    .bind(sub)
+    .fetch_all(pool)
+    .await?;
+
+    Ok(rows)
 }
 
 pub async fn insert_user(pool: &Pool<Postgres>, sub: String) -> DbResult<()> {
@@ -120,4 +131,29 @@ pub async fn update_user_streak(pool: &Pool<Postgres>, streaks: UserStreaks) -> 
     .await?;
 
     Ok(())
+}
+
+pub async fn insert_affirmations_mail(pool: &Pool<Postgres>, sender: String, recipient: String, content: String, sent_at: NaiveDateTime) -> DbResult<()> {
+    sqlx::query(
+        "INSERT INTO affirmations_mail (sender_id, recipient_id, content, sent_at) VALUES ($1, $2, $3, $4)"
+    )
+    .bind(sender)
+    .bind(recipient)
+    .bind(content)
+    .bind(sent_at)
+    .execute(pool)
+    .await?;
+
+    Ok(())
+}
+
+pub async fn get_all_mail_affirmations(pool: &Pool<Postgres>, sub: String) -> DbResult<Vec<MailedAffirmation>> {
+    let rows = sqlx::query_as::<_, MailedAffirmation>(
+        "SELECT * FROM affirmations_mail WHERE recipient_id = $1 ORDER BY sent_at DESC"
+    )
+    .bind(sub)
+    .fetch_all(pool)
+    .await?;
+
+    Ok(rows)
 }

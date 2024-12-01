@@ -1,4 +1,4 @@
-import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, FlatList } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, FlatList, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
@@ -12,6 +12,8 @@ import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
 import { BlurView } from 'expo-blur';
 import { AffirmationHistoryItem, useGenAffirmations } from '@/hooks/useGenAffirmations';
+import { MailAffirmationHistoryItem, useMailAffirmations } from '@/hooks/useMailAffirmations';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export default function MainDisplay() {
 
@@ -36,6 +38,12 @@ export default function MainDisplay() {
         sendNewAffirmation,
         affirmationHistoryResponseData,
     } = useGenAffirmations();
+
+    const {
+        getAffirmationMail,
+        sendNewMailAffirmation,
+        affirmationMailResponseData,
+    } = useMailAffirmations();
 
     // Handle new affirmation submission
     const handleNewAffirmation = async (newAffirmation: string) => {
@@ -96,11 +104,14 @@ export default function MainDisplay() {
     useEffect(() => {
         getStreakInfo();
         getAffirmationHistory();
+        getAffirmationMail();
     }, [])
 
     useEffect(() => {
         setCurrentStreak(streakResponseData?.currentStreak || 0);
     }, [streakResponseData])
+
+    const { logout } = useAuth0();
 
     const renderAffirmation = ({ item }: { item: AffirmationHistoryItem }) => (
         <LinearGradient 
@@ -113,6 +124,20 @@ export default function MainDisplay() {
       <View style={styles.affirmationDetails}>
       <ThemedText style={styles.affirmationText}>{item.content}</ThemedText>
       <ThemedText style={styles.affirmationDate}>{item.createdAt.toLocaleDateString()}</ThemedText>
+      </View>
+        </LinearGradient>
+    );
+    const renderMailAffirmation = ({ item }: { item: MailAffirmationHistoryItem }) => (
+        <LinearGradient 
+        colors={[Colors.light.yellow, Colors.light.blue]} 
+        locations={[0.2785, 0.9698]} 
+        style={styles.affirmation}
+        start={{ x: 1, y: 0 }} 
+        end={{ x: 0, y: 1 }}   
+    >
+      <View style={styles.affirmationDetails}>
+      <ThemedText style={styles.affirmationText}>{item.content}</ThemedText>
+      <ThemedText style={styles.affirmationDate}>{item.sentAt.toLocaleDateString()}</ThemedText>
       </View>
         </LinearGradient>
     );
@@ -146,6 +171,9 @@ export default function MainDisplay() {
             <SafeAreaView />
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb} />
+            </View>
+            <View>
+            <Button onPress={() => logout({ returnTo: "http://localhost:8081/login"})}>Log Out</Button>
             </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
@@ -222,6 +250,23 @@ export default function MainDisplay() {
                     <FlatList
                             data={streakResponseData ? streakResponseData.affirmations : []} // Data array for affirmations
                             renderItem={renderUserAffirmation} // Render each affirmation
+                            keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
+                            horizontal={true} // Enables horizontal scrolling
+                            showsHorizontalScrollIndicator={false} // Hides scroll bar
+                            contentContainerStyle={styles.affirmationsList}
+                            ListEmptyComponent={renderEmptyAffirmationBox}
+                        />
+                    </ScrollView>
+                    </View>
+
+                    <View style={styles.section2}>
+                    <ThemedText style={styles.subtitle1}>
+                      Affirmations From Others
+                    </ThemedText>
+                    <ScrollView horizontal={true} style={styles.horizontalScroll}>
+                    <FlatList
+                            data={affirmationMailResponseData ? affirmationMailResponseData.items : []} // Data array for affirmations
+                            renderItem={renderMailAffirmation} // Render each affirmation
                             keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
                             horizontal={true} // Enables horizontal scrolling
                             showsHorizontalScrollIndicator={false} // Hides scroll bar

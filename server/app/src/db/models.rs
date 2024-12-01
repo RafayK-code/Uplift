@@ -2,7 +2,7 @@ use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
 use sqlx::prelude::FromRow;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, FromRow, Clone)]
 
 pub struct User {
     pub sub: String,
@@ -16,7 +16,7 @@ pub struct GeneratedAffirmation {
     pub created_at: NaiveDateTime,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, FromRow)]
 
 pub struct MailedAffirmation {
     pub id: i32,
