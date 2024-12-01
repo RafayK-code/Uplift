@@ -1,14 +1,16 @@
-import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert } from 'react-native';
+import { Image, Text, View, SafeAreaView, StyleSheet, Pressable, Alert, Button } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Colors } from '@/constants/Colors';
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
+// import { AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
 
 
 import Messages from '../components/messages';
 import VoiceflowButton from '../components/Voiceflow';
+import DailyOverlay from '../components/feelings';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
@@ -17,11 +19,12 @@ import { BlurView } from 'expo-blur';
 export default function MainDisplay() {
 
     const currentTime = useCurrentTime();
-
+    const [showOverlay, setShowOverlay] = useState<boolean>(false);
     const [text, setText] = useState<string>('');
     const [currentStreak, setCurrentStreak] = useState<number>(0);
     const [timeDisplay, setTimeDisplay] = useState(currentTime);
     const [messageDisplay, setMessageDisplay] = useState('Live, Laugh, Love, Serve Slay Survive, Lorem Ipsum');
+    const [hasAnswered, setHasAnswered] = useState(false);
 
     const { 
         getStreakInfo, 
@@ -31,6 +34,10 @@ export default function MainDisplay() {
         streaksLoading, 
         error 
     } = useStreaks();
+
+    const handleUserProfilePress = () => {
+        setShowOverlay(!showOverlay); // Toggle the overlay visibility
+    };
 
     // Handle new affirmation submission
     const handleNewAffirmation = async (newAffirmation: string) => {
@@ -79,7 +86,12 @@ export default function MainDisplay() {
         if (result) {
             setText('');
         }
-    }
+    };
+
+    const handleAnswer = () => {
+        setHasAnswered(true);
+        localStorage.setItem('hasAnsweredToday', 'true');
+      };
     
     useEffect(() => {
         getStreakInfo()
@@ -88,14 +100,44 @@ export default function MainDisplay() {
     useEffect(() => {
         setCurrentStreak(streakResponseData?.currentStreak || 0);
     }, [streakResponseData])
+    useEffect(() => {
+        const answeredStatus = localStorage.getItem('hasAnsweredToday');
+        if (answeredStatus === 'true') {
+          setHasAnswered(true);
+        }
+      }, []);
 
     return (
         
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
+            <View style={styles.container}>
+      {hasAnswered ? (
+        <Text>You have already answered the prompt today.</Text>
+      ) : (
+        <DailyOverlay onSubmit={handleAnswer} />
+      )}
+    </View>
+            {/* <View style={{ padding: 20 }}>
+                {hasAnswered ? (
+                <Text>.</Text>
+                    ) : (
+                <DailyOverlay onSubmit={handleAnswer} />
+                // <DailyOverlay onPress={handleAnswer} />
+                )}
+            </View> */}
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} />
             </View>
+            <View style={styles.userView}>
+            <Pressable onPress={handleUserProfilePress}>
+                    <Image
+                        source={require('@/assets/images/user-profile.svg')}
+                        style={styles.icon}
+                        resizeMode="contain"
+                    />
+                </Pressable>
+                </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
                 <View style={styles.logoContainer}>
                 <Image
@@ -105,6 +147,7 @@ export default function MainDisplay() {
                     />
                 
                 </View>
+                
                 <LinearGradient 
                     colors={['#AFE3FF', '#FFF186', '#FFF']} // Gradient colors
                     locations={[0, 0.2221, 0.5483]} // Percentage positions converted to decimal (e.g., 22.21% = 0.2221)
@@ -174,6 +217,11 @@ export default function MainDisplay() {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    },
     mainContainer: {
         width: '100%',
         flexGrow: 1, // Allow ScrollView to expand based on content
@@ -243,11 +291,9 @@ const styles = StyleSheet.create({
         height: 40,
     },
     userView: {
-        // marginLeft: "80%",
-        // marginTop: '5%',
         position: 'absolute',
-        top: '5%',
-        right: '-2%',
+        top: '3%',
+        right: '7%',
         zIndex: 1000,
         // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
         borderRadius: 25,
