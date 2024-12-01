@@ -14,7 +14,6 @@ export default function HomeScreen() {
   const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [token, setToken] = useState('');
   const router = useRouter();
-  var flag = true;
 
   const handleLogin = async () => {
     if (!isAuthenticated) {
@@ -54,8 +53,6 @@ export default function HomeScreen() {
           const t = await getAccessTokenSilently();
           setToken(t);
           console.log(t);
-          flag = false;
-          router.push('/(tabs)/maindisplay');
         } catch (error) {
           console.error('Error fetching token:');
         }
@@ -103,7 +100,7 @@ export default function HomeScreen() {
         </View>
         <View style={styles.loginContainer}>
           <Pressable style={styles.loginBtn} onPress={handleLogin}>
-            <ThemedText style={styles.btnText}>Begin →</ThemedText>
+            <ThemedText style={styles.btnText}>→</ThemedText>
           </Pressable>
           
 
