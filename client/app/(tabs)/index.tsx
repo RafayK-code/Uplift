@@ -1,30 +1,39 @@
-import { Image, StyleSheet, Platform, SafeAreaView, View, Pressable, TextInput,} from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { Image, StyleSheet, SafeAreaView, View, Pressable} from 'react-native';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useEffect, useState } from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
-import { Button } from 'react-native';
 
 import { Colors } from '@/constants/Colors';
+import { navigate } from 'expo-router/build/global-state/routing';
 
 export default function HomeScreen() {
   const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const [token, setToken] = useState('');
+  const router = useRouter();
+  var flag = true;
 
   const handleLogin = async () => {
     if (!isAuthenticated) {
       await loginWithRedirect();
+      // Manually wait for authentication status to update.
+      setTimeout(async () => {
+      if (isAuthenticated) {
+        router.push('/(tabs)/maindisplay');
+        }
+      }, 30); // Adjust delay if needed.
+    return;
+
     }
 
     try {
       const token = await getAccessTokenSilently();
       setToken(token);
       console.log('Access Token:', token);
+      router.push('/(tabs)/maindisplay');
     } catch (error) {
       console.error('Error during login:');
     }
@@ -45,6 +54,8 @@ export default function HomeScreen() {
           const t = await getAccessTokenSilently();
           setToken(t);
           console.log(t);
+          flag = false;
+          router.push('/(tabs)/maindisplay');
         } catch (error) {
           console.error('Error fetching token:');
         }
@@ -52,28 +63,7 @@ export default function HomeScreen() {
     };
 
     fetchToken();
-  }, [isAuthenticated, getAccessTokenSilently]);
-  // const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  // const [token, setToken] = useState('');
-
-  // const handleLogin = async () => {
-  //   // Trigger the Auth0 login popup or redirect
-  //   await loginWithRedirect();
-
-  //   // After login, get the access token
-  //   const token = await getAccessTokenSilently();
-  //   console.log('Access Token:', token);
-  // };
-
-  // const getToken = async () => {
-  //   const t = await getAccessTokenSilently();
-  //   setToken(t);
-  //   console.log(t);
-  // }
-
-  // useEffect(() => {
-  //   getToken();
-  // }, [isAuthenticated])
+  }, [isAuthenticated, getAccessTokenSilently, navigate]);
 
   return (
     <ThemedView style={{ flex: 1 }}>
@@ -112,7 +102,7 @@ export default function HomeScreen() {
         <ThemedText style={styles.message}>Empowering words to brighten your day, one affirmation at a time</ThemedText>
         </View>
         <View style={styles.loginContainer}>
-          <Pressable style={({ pressed }) => pressed ? styles.loginBtnPressed : styles.loginBtn} onPress={handleLogin}>
+          <Pressable style={styles.loginBtn} onPress={handleLogin}>
             <ThemedText style={styles.btnText}>Begin →</ThemedText>
           </Pressable>
           
@@ -133,22 +123,10 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     padding: 10,
-    // marginBottom: "-40%"
-    // marginBottom: "-40%"
+    marginBottom: '-40%'
   },
   upliftLogo: {
     width: 180,
-  },
-  inputBox: {
-    height: 50,
-    width: '100%',
-    marginVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 50,
-    backgroundColor: Colors.light.background,
-    borderStyle: 'solid',
-    borderColor: Colors.light.lightgrey,
-    borderWidth: 1.5,
   },
 
   loginBtn: {
@@ -161,16 +139,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.light.text
   },
 
-  loginBtnPressed: {
-    height: 50,
-    borderRadius: 8,
-    width: '100%',
-    marginVertical: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: Colors.light.pink
-  },
-
   btnText: {
     color: 'white',
   },
@@ -179,16 +147,6 @@ const styles = StyleSheet.create({
     color: 'red',
     marginTop: 10,
   },
-  backgroundCircle: {
-    position: 'absolute',
-    width: '140%', // Make the circle larger than the screen
-    aspectRatio: 1, // Ensures it stays a perfect circle
-    borderRadius: 500, // Rounds the edges fully to make it circular
-    // marginTop: 95,
-    top: '-15%', // Adjust vertical position (negative pushes it up)
-    left: '-25%', // Center it horizontally
-    zIndex: -1, // Push it behind other elements
-},
 gradientBackground: {
   flex: 1, // Take up the full screen height
   justifyContent: 'center',
@@ -209,7 +167,7 @@ message: {
 },
 caption: {
   textAlign: 'center',
-  padding: 20,
+  padding: 50,
   marginBottom: '-10%'
 }
 });
