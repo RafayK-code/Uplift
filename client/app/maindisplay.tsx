@@ -6,9 +6,10 @@ import { ThemedText } from '@/components/ThemedText';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 // import { AsyncStorage from '@react-native-async-storage/async-storage';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 
 import VoiceflowButton from '../components/Voiceflow';
-import DailyOverlay from '../components/feelings';
+import DailyOverlay from './feelings';
 
 import { useCurrentTime } from '@/hooks/useCurrentTime';
 import { useStreaks } from '@/hooks/useStreaks';
@@ -24,6 +25,7 @@ export default function MainDisplay() {
     const [timeDisplay, setTimeDisplay] = useState(currentTime);
     const [messageDisplay, setMessageDisplay] = useState('Live, Laugh, Love, Serve Slay Survive, Lorem Ipsum');
     const [hasAnswered, setHasAnswered] = useState(false);
+    
 
     const { 
         getStreakInfo, 
@@ -33,10 +35,26 @@ export default function MainDisplay() {
         streaksLoading, 
         error 
     } = useStreaks();
+    const router = useRouter();
 
     const handleUserProfilePress = () => {
-        setShowOverlay(!showOverlay); // Toggle the overlay visibility
+        console.log("bitch");
+    
+        // Add a delay before navigating and toggling the overlay visibility
+        setTimeout(() => {
+            // Navigate after the delay
+            router.push('/feelings');
+            
+            // Toggle the overlay visibility after the delay
+            setShowOverlay(!showOverlay);
+        }, 1000);  // 1000ms delay before executing the navigation and state change
     };
+    // const handleUserProfilePress = () => {
+    //     console.log("bitch");
+        
+    //     router.push('/feelings');
+    //     setShowOverlay(!showOverlay); // Toggle the overlay visibility
+    // };
 
     const {
         getAffirmationHistory,
@@ -151,13 +169,13 @@ export default function MainDisplay() {
         
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
-            <View style={styles.container}>
+            {/* <View style={styles.container}>
       {hasAnswered ? (
         <Text>You have already answered the prompt today.</Text>
       ) : (
         <DailyOverlay onSubmit={handleAnswer} />
       )}
-    </View>
+    </View> */}
             {/* <View style={{ padding: 20 }}>
                 {hasAnswered ? (
                 <Text>.</Text>
@@ -170,12 +188,15 @@ export default function MainDisplay() {
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb}/>
             </View>
             <View style={styles.userView}>
+            
             <Pressable onPress={handleUserProfilePress}>
                     <Image
                         source={require('@/assets/images/user-profile.svg')}
                         style={styles.icon}
                         resizeMode="contain"
                     />
+                    <ThemedText>Dawg</ThemedText>
+                    
                 </Pressable>
                 </View>
             <ScrollView contentContainerStyle={styles.mainContainer}>
@@ -363,7 +384,6 @@ const styles = StyleSheet.create({
         zIndex: -1, // Push it behind other elements
     },
     icon: {
-        width: 40,
         height: 40,
     },
     userView: {
