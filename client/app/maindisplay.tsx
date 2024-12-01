@@ -194,6 +194,13 @@ export default function MainDisplay() {
         
         <ThemedView style={[styles.themeView, { flex: 1 }]}>
             <SafeAreaView />
+            <View style={styles.userView}>
+            <Image
+                    source={require('@/assets/images/logout.svg')}
+                    style={styles.icon}
+                    resizeMode="contain"
+                    />
+            </View>
             <View style={styles.toolsView}>
             <VoiceflowButton setTimeDisplay={setTimeDisplay} setMessageDisplay={setMessageDisplay} onPressCb={onPressCb} />
             </View>
@@ -475,16 +482,14 @@ const styles = StyleSheet.create({
     },
     icon: {
         width: 40,
-        height: 40,
+        height: 45,
     },
     userView: {
-        // marginLeft: "80%",
-        // marginTop: '5%',
         position: 'absolute',
-        top: '5%',
-        right: '-2%',
+        top: '3%',
+        right: '7%',
         zIndex: 1000,
-        // backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Optional: Semi-transparent background
         borderRadius: 25,
         padding: 10,
         alignItems: 'center',
