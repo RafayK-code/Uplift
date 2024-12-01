@@ -17,23 +17,63 @@ export default function HomeScreen() {
   const [token, setToken] = useState('');
 
   const handleLogin = async () => {
-    // Trigger the Auth0 login popup or redirect
-    await loginWithRedirect();
+    if (!isAuthenticated) {
+      await loginWithRedirect();
+    }
 
-    // After login, get the access token
-    const token = await getAccessTokenSilently();
-    console.log('Access Token:', token);
+    try {
+      const token = await getAccessTokenSilently();
+      setToken(token);
+      console.log('Access Token:', token);
+    } catch (error) {
+      console.error('Error during login:');
+    }
   };
 
   const getToken = async () => {
-    const t = await getAccessTokenSilently();
-    setToken(t);
-    console.log(t);
+    if (isAuthenticated) {
+      const t = await getAccessTokenSilently();
+      
+      setToken(t);
+      console.log(t);
+    }
   }
-
   useEffect(() => {
-    getToken();
-  }, [isAuthenticated])
+    const fetchToken = async () => {
+      if (isAuthenticated) {
+        try {
+          const t = await getAccessTokenSilently();
+          setToken(t);
+          console.log(t);
+        } catch (error) {
+          console.error('Error fetching token:');
+        }
+      }
+    };
+
+    fetchToken();
+  }, [isAuthenticated, getAccessTokenSilently]);
+  // const { loginWithRedirect, isAuthenticated, user, getAccessTokenSilently } = useAuth0();
+  // const [token, setToken] = useState('');
+
+  // const handleLogin = async () => {
+  //   // Trigger the Auth0 login popup or redirect
+  //   await loginWithRedirect();
+
+  //   // After login, get the access token
+  //   const token = await getAccessTokenSilently();
+  //   console.log('Access Token:', token);
+  // };
+
+  // const getToken = async () => {
+  //   const t = await getAccessTokenSilently();
+  //   setToken(t);
+  //   console.log(t);
+  // }
+
+  // useEffect(() => {
+  //   getToken();
+  // }, [isAuthenticated])
 
   return (
     <ThemedView style={{ flex: 1 }}>
