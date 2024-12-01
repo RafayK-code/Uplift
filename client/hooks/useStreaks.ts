@@ -16,13 +16,13 @@ export interface StreakPayload {
 
 export const useStreaks = () => {
     const { authFetch } = useAuthFetch();
-    const [loading, setLoading] = useState<boolean>();
+    const [streaksLoading, setStreaksLoading] = useState<boolean>();
     const [streakResponseData, setStreakResponseData] = useState<StreakResponse | null>(null);
 
     const serverUrl = 'http://localhost:8080';
 
     const getStreakInfo = async () => {
-        setLoading(true);
+        setStreaksLoading(true);
         try {
             const data = await authFetch(`${serverUrl}/get_user_streak`, {
                 method: 'get',
@@ -42,7 +42,7 @@ export const useStreaks = () => {
             console.log(error);
         }
         finally {
-            setLoading(false);
+            setStreaksLoading(false);
         }
     }
 
@@ -58,7 +58,7 @@ export const useStreaks = () => {
     }
 
     const uploadStreakInfo = async (payload: StreakPayload) => {
-        setLoading(true);
+        setStreaksLoading(true);
         try {
             const data = await authFetch(`${serverUrl}/update_user_streak`, {
                 method: 'post',
@@ -77,9 +77,9 @@ export const useStreaks = () => {
             console.log(error);
         }
         finally {
-            setLoading(false);
+            setStreaksLoading(false);
         }
     }
 
-    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation };
+    return { getStreakInfo, uploadStreakInfo, checkIfSameAffirmation, streaksLoading };
 }
