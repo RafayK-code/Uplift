@@ -37,6 +37,17 @@ const renderAffirmation = ({ item }: { item: AffirmationHistoryItem }) => (
   </View>
     </LinearGradient>
 );
+const renderEmptyAffirmationBox = () => (
+  <LinearGradient 
+    colors={['white', 'white']} // A simple gray box for empty affirmation
+    locations={[0, 1]} 
+    style={styles.emptyAffirmation}
+    start={{ x: 1, y: 0 }}
+    end={{ x: 0, y: 1 }}
+  >
+    <ThemedText style={styles.affirmationText}>No affirmations yet</ThemedText>
+  </LinearGradient>
+);
 if (affirmationsLoading) {
   return (
     <ThemedText>Loading...</ThemedText> //replace later with loading page!!!
@@ -53,12 +64,13 @@ if (affirmationsLoading) {
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
             <FlatList
-                    data={affirmationHistoryResponseData?.items || []} // Data array for affirmations
+                    data={affirmationHistoryResponseData ? affirmationHistoryResponseData.items : []} // Data array for affirmations
                     renderItem={renderAffirmation} // Render each affirmation
-                    keyExtractor={(item) => item.createdAt.toISOString()}// Unique key for each affirmation
+                    keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
                     horizontal={true} // Enables horizontal scrolling
                     showsHorizontalScrollIndicator={false} // Hides scroll bar
                     contentContainerStyle={styles.affirmationsList}
+                    ListEmptyComponent={renderEmptyAffirmationBox}
                 />
               {/* <ThemedText style={styles.toGallery}>See All</ThemedText> */}
             </ScrollView>
@@ -69,12 +81,13 @@ if (affirmationsLoading) {
             </ThemedText>
             <ScrollView horizontal={true} style={styles.horizontalScroll}>
             <FlatList
-                    data={affirmationHistoryResponseData?.items || []} // Data array for affirmations
+                    data={affirmationHistoryResponseData ? affirmationHistoryResponseData.items : []} // Data array for affirmations
                     renderItem={renderAffirmation} // Render each affirmation
-                    keyExtractor={(item) => item.createdAt.toISOString()} // Unique key for each affirmation
+                    keyExtractor={(item, index) => index.toString()}// Unique key for each affirmation
                     horizontal={true} // Enables horizontal scrolling
                     showsHorizontalScrollIndicator={false} // Hides scroll bar
                     contentContainerStyle={styles.affirmationsList}
+                    ListEmptyComponent={renderEmptyAffirmationBox}
                 />
             </ScrollView>
             </View>
@@ -109,8 +122,6 @@ const styles = StyleSheet.create({
       aspectRatio: 2,
       flexDirection: 'row',
       backgroundColor: '#000000', // Background color
-      // justifyContent: 'center', // Align text vertically
-      // alignItems: 'center', // Align text horizontally
       marginBottom: 5,
       borderRadius: 10, // Optional: rounded corners
       marginRight: 15,
@@ -120,7 +131,24 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 4, height: 4 }, // Shadow offset (like x and y)
         shadowOpacity: 1, // Opacity of the shadow
         shadowRadius: 3, // Blur radius
-      // marginTop: 150
+
+      marginLeft: 15,
+      
+    },
+    emptyAffirmation: {
+      width: '91vw',
+      aspectRatio: 2,
+      flexDirection: 'row',
+      backgroundColor: '#000000', // Background color
+      marginBottom: 5,
+      borderRadius: 10, // Optional: rounded corners
+      marginRight: 15,
+      justifyContent: 'center',
+      alignItems: 'center',
+      shadowColor: 'rgba(0, 0, 0, 0.10)', // Shadow color
+        shadowOffset: { width: 4, height: 4 }, // Shadow offset (like x and y)
+        shadowOpacity: 1, // Opacity of the shadow
+        shadowRadius: 3, // Blur radius
 
       marginLeft: 15,
       
