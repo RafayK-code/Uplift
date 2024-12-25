@@ -80,7 +80,3 @@ Uplift is a mobile application that delivers daily AI-generated words of affirma
     ```bash
     docker-compose up --build
     ```
-
-## License
-
-This project is licensed under the MIT License.
